@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>edit_infor</class>
+ <widget class="QDialog" name="edit_infor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>650</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>编辑个人信息</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ================= 全局窗口设置 ================= */
+QDialog {
+    background-color: #ffffff;
+    color: #333333;
+    font-family: &quot;Microsoft YaHei&quot;, &quot;Segoe UI&quot;, sans-serif;
+}
+
+/* ================= 标签 (Label) 样式 ================= */
+QLabel {
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+}
+
+/* ================= 输入框 (LineEdit) 样式 ================= */
+QLineEdit {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    color: #000000;
+    padding: 5px 8px;
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #0078d7;
+}
+
+/* 只读输入框样式 */
+QLineEdit[readOnly=&quot;true&quot;] {
+    background-color: #f7f7f7;
+    color: #555555;
+    border: 1px solid #dddddd;
+}
+
+/* ================= 按钮 (PushButton) 样式 ================= */
+QPushButton {
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-bottom: 2px solid #b0b0b0;
+    border-radius: 6px;
+    color: #333333;
+    font-size: 14px;
+    padding: 6px 16px;
+}
+
+QPushButton:hover {
+    background-color: #f0f8ff;
+    border-color: #0078d7;
+    color: #0078d7;
+}
+
+QPushButton:pressed {
+    background-color: #e0e0e0;
+    border-top: 2px solid #b0b0b0;
+    border-bottom: none;
+    padding-top: 8px;
+    padding-bottom: 4px;
+}
+
+/* ================= 头像预览框样式 ================= */
+QLabel#label_5 {
+    background-color: #f0f0f0;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+}</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>310</y>
+     <width>211</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>50</y>
+     <width>111</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>设置你的照片：</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>45</y>
+     <width>161</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>选择本地图片</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>69</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>原用户名：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="old_name">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>95</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::NoFocus</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string>当前用户名</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>160</y>
+     <width>69</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>新用户名：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="new_name">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>155</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>请输入新的用户名</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>220</y>
+     <width>69</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>简介：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="new_jianjie">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>215</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>45</y>
+     <width>131</width>
+     <height>160</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>头像预览</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>edit_infor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>edit_infor</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
