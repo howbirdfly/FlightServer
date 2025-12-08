@@ -29,7 +29,11 @@ enum MessageType {
     MSG_GET_FAVORITES = 4003,   // 获取收藏列表
     MSG_GET_FAVORITES_RESPONSE = 4004,
     MSG_DELETE_FAVORITE = 4005, // 删除收藏
-    MSG_DELETE_FAVORITE_RESPONSE = 4006
+    MSG_DELETE_FAVORITE_RESPONSE = 4006,
+
+    // 支付相关
+    MSG_PAY = 5001,             // 支付请求
+    MSG_PAY_RESPONSE = 5002     // 支付响应
 };
 
 #endif // PROTOCOL_H

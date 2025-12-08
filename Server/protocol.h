@@ -29,7 +29,25 @@ enum MessageType {
     MSG_GET_FAVORITES = 4003,   // 获取收藏列表
     MSG_GET_FAVORITES_RESPONSE = 4004,
     MSG_DELETE_FAVORITE = 4005, // 删除收藏
-    MSG_DELETE_FAVORITE_RESPONSE = 4006 // 删除收藏响应
+    MSG_DELETE_FAVORITE_RESPONSE = 4006, // 删除收藏响应
+
+    // 支付相关
+    MSG_PAY = 5001,             // 支付请求
+    MSG_PAY_RESPONSE = 5002,    // 支付响应
+    MSG_GET_BALANCE = 5003,     // 获取余额请求
+    MSG_GET_BALANCE_RESPONSE = 5004, // 获取余额响应
+
+    // 乘客管理相关
+    MSG_ADD_PASSENGER = 6001,   // 添加乘客请求
+    MSG_ADD_PASSENGER_RESPONSE = 6002, // 添加乘客响应
+    MSG_GET_PASSENGERS = 6003,  // 获取乘客列表请求
+    MSG_GET_PASSENGERS_RESPONSE = 6004, // 获取乘客列表响应
+    MSG_DELETE_PASSENGER = 6005, // 删除乘客请求
+    MSG_DELETE_PASSENGER_RESPONSE = 6006, // 删除乘客响应
+
+    // 订单删除
+    MSG_DELETE_ORDER = 3007,    // 删除订单请求
+    MSG_DELETE_ORDER_RESPONSE = 3008  // 删除订单响应
 };
 
 #endif // PROTOCOL_H

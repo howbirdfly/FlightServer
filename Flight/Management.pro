@@ -15,6 +15,7 @@ SOURCES += \
     favorite_dialog.cpp \
     main.cpp \
     passenger.cpp \
+    pay.cpp \
     sign_in.cpp \
     single_center.cpp \
     order_dialog.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     favorite_dialog.h \
     passenger.h \
     edit_infor.h \
+    pay.h \
     sign_in.h \
     single_center.h \
     order_dialog.h \

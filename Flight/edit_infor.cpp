@@ -187,6 +187,8 @@ void edit_infor::onGetUserInfoResponse(int msgType, bool success,
 void edit_infor::onUpdateUserInfoResponse(int msgType, bool success,
                                          const QString &message, const QJsonObject &data)
 {
+    Q_UNUSED(data); // 参数未使用，消除警告
+    
     // 只处理更新用户信息响应
     if (msgType != MSG_UPDATE_USER_INFO_RESPONSE) {
         return;

@@ -37,6 +37,13 @@ private:
     void handleGetFavorites(QTcpSocket *client, const QJsonObject &data);
     void handleDeleteFavorite(QTcpSocket *client, const QJsonObject &data);
     void handleUpdateUserInfo(QTcpSocket *client, const QJsonObject &data);
+    void handlePay(QTcpSocket *client, const QJsonObject &data);
+    void handleGetBalance(QTcpSocket *client, const QJsonObject &data);
+    void handleAddPassenger(QTcpSocket *client, const QJsonObject &data);
+    void handleGetPassengers(QTcpSocket *client, const QJsonObject &data);
+    void handleDeletePassenger(QTcpSocket *client, const QJsonObject &data);
+    void handleDeleteOrder(QTcpSocket *client, const QJsonObject &data);
+    bool checkTimeConflict(const QString &passengerIDCard, int newTicketId);
     // 发送响应
     void sendResponse(QTcpSocket *client, int msgType, bool success,
                       const QString &message, const QJsonObject &data = QJsonObject());
