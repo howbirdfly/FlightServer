@@ -637,7 +637,9 @@ release/server.o: ../../Server/server.cpp ../../Server/server.h \
 		../../Server/protocol.h \
 		../../../../../QT/6.9.2/mingw_64/include/QtSql/QSqlError \
 		../../../../../QT/6.9.2/mingw_64/include/QtSql/qsqlerror.h \
-		../../../../../QT/6.9.2/mingw_64/include/QtCore/QDateTime
+		../../../../../QT/6.9.2/mingw_64/include/QtCore/QDateTime \
+		../../../../../QT/6.9.2/mingw_64/include/QtCore/QRandomGenerator \
+		../../../../../QT/6.9.2/mingw_64/include/QtCore/qrandom.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\server.o ..\..\Server\server.cpp
 
 release/moc_server.o: release/moc_server.cpp 

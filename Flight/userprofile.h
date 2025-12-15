@@ -37,6 +37,7 @@ private slots:
     void on_pushButton_10_clicked();//增加乘客
     void on_pushButton_5_clicked();//编辑个人资料
     void on_btn_favorites_clicked();//收藏
+    void on_btn_recharge_clicked();//充值
     void onGetUserInfoResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
 
 private:

@@ -1,0 +1,183 @@
+/* ===== 白色半透明风格（紧凑版） ===== */
+QMainWindow {
+    background-image: url(:/images/flight2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* 1. 容器（QFrame） - 尺寸缩小 */
+QFrame {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 15px;  /* 圆角减小 */
+    padding: 25px;  /* 内边距减小 */
+
+    /* 模拟毛玻璃效果 */
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    border-left: 1px solid rgba(255, 255, 255, 0.35);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    /* 容器尺寸缩小 */
+    min-width: 350px;  /* 宽度减小 */
+    min-height: 280px; /* 高度减小 */
+}
+
+/* 2. 标签（QLabel） - 尺寸缩小 */
+QLabel {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 14px;  /* 字体减小 */
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.12);
+    padding: 6px 12px;  /* 内边距减小 */
+    border-radius: 6px;  /* 圆角减小 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 8px 0 4px 0;  /* 间距减小 */
+
+    /* 高度减小 */
+    min-height: 28px;  /* 最小高度减小 */
+    max-height: 35px;  /* 最大高度减小 */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+
+    /* 宽度减小 */
+    min-width: 70px;
+}
+
+/* 特殊标签样式 */
+QLabel[text="用户名："],
+QLabel[text="账号："] {
+    background-color: rgba(255, 255, 255, 0.18);
+    border-left: 4px solid rgba(255, 255, 255, 0.6);  /* 左边框变细 */
+    min-width: 80px;
+    margin-top: 10px;  /* 顶部间距减小 */
+}
+
+QLabel[text="密码："] {
+    background-color: rgba(255, 255, 255, 0.18);
+    border-left: 4px solid rgba(255, 255, 255, 0.6);
+    min-width: 80px;
+    margin-top: 18px;  /* 顶部间距减小 */
+}
+
+/* 3. 输入框（QLineEdit） - 尺寸缩小 */
+QLineEdit {
+    background-color: rgba(255, 255, 255, 0.18);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);  /* 边框变细 */
+    border-radius: 8px;  /* 圆角减小 */
+    padding: 10px 15px;  /* 内边距减小 */
+    font-size: 14px;  /* 字体减小 */
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    min-height: 20px;  /* 最小高度减小 */
+    selection-background-color: rgba(255, 255, 255, 0.3);
+
+    /* 宽度减小 */
+    min-width: 180px;
+
+    /* 间距减小 */
+    margin: 4px 0 10px 0;  /* 上下间距都减小 */
+}
+
+QLineEdit:focus {
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);  /* 边框变细 */
+    color: white;
+}
+
+QLineEdit:hover {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+QLineEdit::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+/* 4. 按钮（QPushButton） - 尺寸缩小 */
+QPushButton {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);  /* 边框变细 */
+    border-radius: 8px;  /* 圆角减小 */
+    padding: 10px 20px;  /* 内边距减小 */
+    font-size: 14px;  /* 字体减小 */
+    font-weight: bold;
+    margin: 18px 8px 8px 8px;  /* 间距减小 */
+
+    /* 尺寸减小 */
+    min-width: 90px;   /* 最小宽度减小 */
+    min-height: 32px;  /* 最小高度减小 */
+    max-height: 40px;  /* 最大高度减小 */
+}
+
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);  /* 边框变细 */
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgba(255, 255, 255, 0.15);
+    padding-top: 11px;  /* 调整按下效果 */
+    padding-bottom: 9px;
+}
+
+/* 登录按钮特殊样式 - 尺寸缩小 */
+QPushButton[text="登录"] {
+    background-color: rgba(59, 130, 246, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);  /* 边框变细 */
+    border-radius: 8px;  /* 圆角减小 */
+    padding: 12px 30px;  /* 内边距减小 */
+    font-size: 15px;  /* 字体减小 */
+    min-width: 110px;    /* 最小宽度减小 */
+    margin-top: 22px;  /* 顶部间距减小 */
+}
+
+QPushButton[text="登录"]:hover {
+    background-color: rgba(37, 99, 235, 0.7);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);  /* 边框变细 */
+}
+/* ===== QMessageBox 样式 ===== */
+
+/* 1. 深色背景版本 */
+QMessageBox {
+    background-color: #2D2D2D;  /* 深色背景 */
+    color: #FFFFFF;            /* 白色文字 */
+    font-size: 14px;
+}
+
+/* 消息框文本颜色 */
+QMessageBox QLabel {
+    color: #FFFFFF;
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    min-height: auto;
+    max-height: none;
+}
+
+/* 消息框按钮 */
+QMessageBox QPushButton {
+    background-color: #3A6DB0;
+    color: white;
+    border: 1px solid #4A7BB0;
+    border-radius: 5px;
+    padding: 8px 16px;
+    margin: 5px;
+    min-width: 80px;
+    min-height: 30px;
+}
+
+QMessageBox QPushButton:hover {
+    background-color: #4A7BB0;
+}
+
+/* 图标区域 */
+QMessageBox QLabel#qt_msgboxex_icon_label {
+    min-width: 32px;
+    min-height: 32px;
+}
+

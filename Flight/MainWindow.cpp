@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QFile>
 #include "sign_in.h"
 #include "deal.h"
 #include "userprofile.h"
@@ -12,6 +13,15 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    
+    // 加载样式
+    QFile qssFile(":/styles/style.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 style.qss";
+    }
 }
 MainWindow::~MainWindow()
 {

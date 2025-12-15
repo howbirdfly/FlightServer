@@ -8,6 +8,7 @@
 #include <QTableWidgetItem>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QFile>
 #include "networkmanager.h"
 #include "protocol.h"
 
@@ -18,6 +19,15 @@ Single_Center::Single_Center(QWidget *parent)
     ui->setupUi(this);
     currentUsername = "";
     initTable();
+    
+    // 加载样式
+    QFile qssFile(":/styles/single.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 single.qss";
+    }
 }
 
 Single_Center::Single_Center(const QString &username, QWidget *parent)
@@ -30,6 +40,15 @@ Single_Center::Single_Center(const QString &username, QWidget *parent)
     loadOrders();
     connect(ui->btn_refresh, &QPushButton::clicked, this, &Single_Center::refreshOrderList);
     connect(ui->btn_back, &QPushButton::clicked, this, &Single_Center::on_btn_back_clicked);
+    
+    // 加载样式
+    QFile qssFile(":/styles/single.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 single.qss";
+    }
 }
 
 Single_Center::~Single_Center()
@@ -103,6 +122,14 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
     
     // 解析订单列表
     QJsonArray orders = data["orders"].toArray();
+    QJsonArray favorites = data["favorites"].toArray();  // 获取收藏列表
+    
+    // 将收藏列表转换为QList
+    QList<int> favoriteTicketIds;
+    for (const QJsonValue &value : favorites) {
+        favoriteTicketIds.append(value.toInt());
+    }
+    
     ui->tableWidget_orders->setRowCount(0);
     
     for (const QJsonValue &value : orders) {
@@ -122,6 +149,7 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
         QString arrTimeStr = order["arrivalTime"].toString();
         QDateTime depTime = QDateTime::fromString(depTimeStr, "yyyy-MM-dd hh:mm:ss");
         QDateTime arrTime = QDateTime::fromString(arrTimeStr, "yyyy-MM-dd hh:mm:ss");
+        int ticketId = order["ticketID"].toInt();  // 获取票务ID用于收藏
         
         QString typeName = ticketType == "Flight" ? "航班" : (ticketType == "Train" ? "火车" : "汽车");
         QString statusName = status == "Paid" ? "已支付" : (status == "Cancelled" ? "已取消" : "待支付");
@@ -169,6 +197,16 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
         } else {
             ui->tableWidget_orders->setItem(row, 8, new QTableWidgetItem("-"));
         }
+        
+        // 添加收藏按钮
+        bool isFavorited = favoriteTicketIds.contains(ticketId);
+        QPushButton *btnFav = new QPushButton(isFavorited ? "已收藏" : "收藏");
+        btnFav->setProperty("ticketId", ticketId);
+        if (isFavorited) {
+            btnFav->setEnabled(false);
+        }
+        connect(btnFav, &QPushButton::clicked, this, &Single_Center::onAddFavorite);
+        ui->tableWidget_orders->setCellWidget(row, 9, btnFav);
     }
 }
 
@@ -253,4 +291,54 @@ void Single_Center::onDeleteOrder()
 void Single_Center::onViewOrder()
 {
 
+}
+
+void Single_Center::onAddFavorite()
+{
+    int userId = getUserId();
+    if (userId == -1) {
+        QMessageBox::warning(this, "提示", "请先登录！");
+        return;
+    }
+    
+    QPushButton *btn = qobject_cast<QPushButton*>(sender());
+    if (!btn) return;
+    int ticketId = btn->property("ticketId").toInt();
+    
+    NetworkClient *client = NetworkManager::instance()->client();
+    
+    connect(client, &NetworkClient::responseReceived,
+            this, &Single_Center::onAddFavoriteResponse, Qt::UniqueConnection);
+    
+    QJsonObject data;
+    data["userID"] = QString::number(userId);
+    data["ticketID"] = ticketId;
+    
+    client->sendRequest(MSG_ADD_FAVORITE, data);
+}
+
+void Single_Center::onAddFavoriteResponse(int msgType, bool success,
+                                         const QString &message, const QJsonObject &data)
+{
+    Q_UNUSED(data);
+    
+    if (msgType != MSG_ADD_FAVORITE_RESPONSE) {
+        return;
+    }
+    
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &Single_Center::onAddFavoriteResponse);
+    
+    if (success) {
+        QMessageBox::information(this, "成功", "已添加到收藏夹！");
+        // 找到对应的按钮并更新状态
+        QPushButton *btn = qobject_cast<QPushButton*>(sender());
+        if (btn) {
+            btn->setEnabled(false);
+            btn->setText("已收藏");
+        }
+    } else {
+        QMessageBox::warning(this, "失败", message);
+    }
 }

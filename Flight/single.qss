@@ -1,0 +1,34 @@
+QLabel#label_title {
+    background-color: #f0f9f5;
+    color: black;
+
+    /* 字体设置 - 更大字号 */
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 20px;  /* 从 16px 增加到 20px */
+    font-weight: bold;
+
+    /* 增加字间距 */
+    letter-spacing: 1px;  /* 添加字间距 */
+
+    /* 边框和边距 - 增加间距 */
+    border: none;
+    padding: 12px 20px;  /* 增加内边距，上下12px，左右20px */
+    border-radius: 6px;   /* 圆角稍微增大 */
+
+    /* 文本对齐 */
+    qproperty-alignment: 'AlignCenter';
+
+    /* 添加外边距（与其他控件的间距） */
+    margin: 10px;
+}
+QPushButton#btn_back,
+QPushButton#btn_refresh{
+    /* 只设置背景色和文字色，不影响大小 */
+    background-color: #0f3b2e;      /* 墨绿色背景 */
+    color: white;                   /* 白色文字 */
+
+    /* 可选：如果需要边框 */
+    border: 1px solid #0a291f;
+    border-radius: 4px;             /* 稍微圆角 */
+}
+

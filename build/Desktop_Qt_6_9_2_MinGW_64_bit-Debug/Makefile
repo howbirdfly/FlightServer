@@ -281,6 +281,7 @@ Makefile: ../../Server/FlightServer.pro ../../../../QT/6.9.2/mingw_64/mkspecs/wi
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/qt_config.prf \
 		../../../../QT/6.9.2/mingw_64/mkspecs/win32-g++/qmake.conf \
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/exclusive_builds.prf \
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/toolchain.prf \
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/default_pre.prf \
@@ -307,7 +308,6 @@ Makefile: ../../Server/FlightServer.pro ../../../../QT/6.9.2/mingw_64/mkspecs/wi
 		../../../../QT/6.9.2/mingw_64/lib/Qt6Sql.prl \
 		../../../../QT/6.9.2/mingw_64/lib/Qt6Network.prl \
 		../../../../QT/6.9.2/mingw_64/lib/Qt6Core.prl \
-		.qmake.stash \
 		../../../../QT/6.9.2/mingw_64/mkspecs/features/build_pass.prf
 	$(QMAKE) -o Makefile ..\..\Server\FlightServer.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/spec_pre.prf:
@@ -521,6 +521,7 @@ Makefile: ../../Server/FlightServer.pro ../../../../QT/6.9.2/mingw_64/mkspecs/wi
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/qt_config.prf:
 ../../../../QT/6.9.2/mingw_64/mkspecs/win32-g++/qmake.conf:
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/exclusive_builds.prf:
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/toolchain.prf:
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/default_pre.prf:
@@ -547,7 +548,6 @@ Makefile: ../../Server/FlightServer.pro ../../../../QT/6.9.2/mingw_64/mkspecs/wi
 ../../../../QT/6.9.2/mingw_64/lib/Qt6Sql.prl:
 ../../../../QT/6.9.2/mingw_64/lib/Qt6Network.prl:
 ../../../../QT/6.9.2/mingw_64/lib/Qt6Core.prl:
-.qmake.stash:
 ../../../../QT/6.9.2/mingw_64/mkspecs/features/build_pass.prf:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\..\Server\FlightServer.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"

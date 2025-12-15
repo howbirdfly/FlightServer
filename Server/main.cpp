@@ -8,13 +8,13 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     Server server;
-    if (!server.listen(QHostAddress::Any, 8888)) {
+    if (!server.listen(QHostAddress::Any, 8080)) {
         qDebug() << "服务端启动失败：" << server.errorString();
         return -1;
     }
 
     qDebug() << "========================================";
-    qDebug() << "服务端已启动，监听端口：8888";
+    qDebug() << "服务端已启动，监听端口：8080";
     qDebug() << "等待客户端连接...";
     qDebug() << "========================================";
 

@@ -8,6 +8,7 @@
 #include <QTableWidgetItem>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QFile>
 #include "networkmanager.h"
 #include "protocol.h"
 
@@ -16,6 +17,15 @@ favorite_dialog::favorite_dialog(QWidget *parent)
     , ui(new Ui::favorite_dialog)
 {
     ui->setupUi(this);
+    
+    // 加载样式
+    QFile qssFile(":/styles/favorite.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 favorite.qss";
+    }
 }
 
 favorite_dialog::favorite_dialog(const QString &userID, QWidget *parent)
@@ -26,6 +36,15 @@ favorite_dialog::favorite_dialog(const QString &userID, QWidget *parent)
     ui->setupUi(this);
     initTable();
     loadFavorites(); // 构造时加载数据
+    
+    // 加载样式
+    QFile qssFile(":/styles/favorite.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 favorite.qss";
+    }
 }
 
 favorite_dialog::~favorite_dialog()

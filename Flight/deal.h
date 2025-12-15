@@ -31,11 +31,16 @@ private slots:
     void showTicketSearchPage();
     void onSearchResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     void onAddFavoriteResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
+    void on_lineEdit_pageNum_returnPressed();
+    void updatePageContainerText();
 private:
     void initTable();
     void searchTickets();
+    int getTotalPage();
+    void initPagination();
+    void getData(const QString &userID);              // 添加
+    void setCircularAvatar(const QByteArray &avatarData);  // 添加
     QString currentUserID;
-
     Ui::Deal *ui;
     Single_Center *m_personalCenterPage;
     UserProfile *m_userProfilePage;

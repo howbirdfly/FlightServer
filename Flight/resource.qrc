@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="flight2.png">images/fight2.png</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>Dealstyle.qss</file>
+        <file>style.qss</file>
+        <file>userprofile.qss</file>
+        <file>single.qss</file>
+        <file>favorite.qss</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>pay_imag/alipay.jpg</file>
+        <file>pay_imag/wechat.jpg</file>
+        <file>img/LeftArrow.png</file>
+        <file>img/rightArrow.png</file>
+    </qresource>
+</RCC>
+

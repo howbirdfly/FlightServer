@@ -3,12 +3,11 @@
 #include "sign_in.h"
 #include "edit_infor.h"
 #include "passenger.h"
+#include "pay.h"
 #include <QMessageBox>
-#include <QSqlDatabase>
 #include <QDebug>
-#include <QSqlQuery>
-#include <QSqlError>
 #include <QPixmap>
+#include <QFile>
 #include "networkmanager.h"
 #include "protocol.h"
 #include <QJsonObject>
@@ -20,6 +19,15 @@ UserProfile::UserProfile(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->btn_back, &QPushButton::clicked, this, &UserProfile::on_btn_back_clicked);
+    
+    // 加载样式
+    QFile qssFile(":/styles/userprofile.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 userprofile.qss";
+    }
 }
 
 
@@ -32,6 +40,15 @@ UserProfile::UserProfile(const QString &userID, QWidget *parent)
     connect(ui->btn_back, &QPushButton::clicked, this, &UserProfile::on_btn_back_clicked);
     if (!this->userID.isEmpty()) {
         getData(this->userID);
+    }
+    
+    // 加载样式
+    QFile qssFile(":/styles/userprofile.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 userprofile.qss";
     }
 }
 
@@ -111,8 +128,13 @@ void UserProfile::on_pushButton_9_clicked()
 }
 
 void UserProfile::on_pushButton_10_clicked(){
-    passenger*s=new passenger(currentUsername);
-    s->show();
+    if (this->userID.isEmpty()) {
+        QMessageBox::warning(this, "提示", "请先登录！");
+        return;
+    }
+    passenger *p = new passenger(this->userID);
+    p->setAttribute(Qt::WA_DeleteOnClose);
+    p->show();
 }
 
 void UserProfile::on_pushButton_5_clicked()
@@ -219,4 +241,24 @@ void UserProfile::onGetUserInfoResponse(int msgType, bool success,
 void UserProfile::on_btn_favorites_clicked()
 {
     emit myFavoritesRequested();
+}
+
+void UserProfile::on_btn_recharge_clicked()
+{
+    // 充值功能：打开支付窗口
+    Pay *payWindow = new Pay();
+    
+    // 设置用户ID
+    payWindow->setUserID(this->userID);
+    
+    // 当支付成功时，刷新个人中心数据
+    connect(payWindow, &Pay::paymentSuccess, this, [this](){
+        if (!this->userID.isEmpty()) {
+            this->getData(this->userID); // 刷新余额显示
+        }
+    });
+    
+    payWindow->show();
+    payWindow->raise();
+    payWindow->activateWindow();
 }

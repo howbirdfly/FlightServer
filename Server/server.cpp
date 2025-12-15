@@ -55,9 +55,9 @@ void Server::initDatabase()
     QString connectionString = "DRIVER={MySQL ODBC 9.5 Unicode Driver};"
                                "SERVER=127.0.0.1;"
                                "PORT=3306;"
-                               "DATABASE=flightdb;"
+                               "DATABASE=flight;"
                                "USER=root;"
-                               "PASSWORD=@WUyh0601;"
+                               "PASSWORD=0011;"
                                "OPTION=3;";
 
     db.setDatabaseName(connectionString);
@@ -477,7 +477,8 @@ void Server::handleSearchTickets(QTcpSocket *client, const QJsonObject &data)
 {
     QString from = data["from"].toString();
     QString to = data["to"].toString();
-    QString date = data["date"].toString();
+    int page = data["page"].toInt(1);           // 添加
+    int pageSize = data["pageSize"].toInt(50);  // 添加
     
     QSqlQuery query(db);
     QString sql = "SELECT flight_id, flight_number, departure_city, arrival_city, departure_time, "
@@ -530,6 +531,17 @@ void Server::handleSearchTickets(QTcpSocket *client, const QJsonObject &data)
     QJsonObject responseData;
     responseData["tickets"] = ticketsArray;
     sendResponse(client, MSG_SEARCH_RESPONSE, true, "查询成功", responseData);
+    int totalCount = 1;
+    int totalPage = (totalCount + pageSize - 1) / pageSize;
+
+    // 添加 LIMIT 和 OFFSET
+    int offset = (page - 1) * pageSize;
+    sql += QString("LIMIT %1, %2").arg(offset).arg(pageSize);
+
+    // 在响应中添加分页信息
+    responseData["totalPage"] = totalPage;
+    responseData["currentPage"] = page;
+    responseData["totalCount"] = totalCount;
 }
 
 // 检查时间冲突

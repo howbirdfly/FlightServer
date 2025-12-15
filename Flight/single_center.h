@@ -28,6 +28,8 @@ private slots:
     void on_btn_back_clicked();
     void onGetOrdersResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     void onCancelOrderResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
+    void onAddFavorite();
+    void onAddFavoriteResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
 private:
     void initTable();
     void loadOrders();

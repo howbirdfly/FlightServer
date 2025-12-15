@@ -11,7 +11,7 @@ public:
     static NetworkManager* instance();
     NetworkClient* client() { return m_client; }
     
-    bool connectToServer(const QString &host = "127.0.0.1", quint16 port = 8888);
+    bool connectToServer(const QString &host = "127.0.0.1", quint16 port = 8080);
 
 private:
     NetworkManager(QObject *parent = nullptr);

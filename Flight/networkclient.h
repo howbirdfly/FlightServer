@@ -16,7 +16,7 @@ public:
     ~NetworkClient();
     
     // 连接和断开
-    bool connectToServer(const QString &host = "127.0.0.1", quint16 port = 8888);
+    bool connectToServer(const QString &host = "127.0.0.1", quint16 port = 8080);
     void disconnectFromServer();
     bool isConnected() const;
     

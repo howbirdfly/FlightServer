@@ -2,7 +2,7 @@
 #define PASSENGER_H
 
 #include <QDockWidget>
-#include <QSqlDatabase>
+#include <QJsonObject>
 
 namespace Ui {
 class passenger;
@@ -14,10 +14,10 @@ class passenger : public QDockWidget
 
 public:
     explicit passenger(QWidget *parent = nullptr);
-    explicit passenger(const QString &username, QWidget *parent = nullptr);
+    explicit passenger(const QString &userID, QWidget *parent = nullptr);
     ~passenger();
 
-    void setUsername(const QString &username);
+    void setUserId(const QString &userID);
 
 signals:
     void backRequested();
@@ -27,10 +27,13 @@ private slots:
     void on_btn_refresh_clicked();
     void on_btn_close_clicked();
     void onDeletePassenger();
+    void onGetPassengersResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
+    void onAddPassengerResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
+    void onDeletePassengerResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
 
 private:
     Ui::passenger *ui;
-    QString currentUsername;
+    QString currentUserID;
 
     void initTable();
     void loadPassengers();

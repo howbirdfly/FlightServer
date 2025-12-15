@@ -1,7 +1,9 @@
 #include "passenger.h"
 #include "ui_passenger.h"
-#include <QSqlQuery>
-#include <QSqlError>
+#include "networkmanager.h"
+#include "protocol.h"
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QPushButton>
@@ -15,18 +17,18 @@ passenger::passenger(QWidget *parent) :
     initTable();
 }
 
-passenger::passenger(const QString &username, QWidget *parent) :
+passenger::passenger(const QString &userID, QWidget *parent) :
     QDockWidget(parent),
     ui(new Ui::passenger),
-    currentUsername(username)
+    currentUserID(userID)
 {
     ui->setupUi(this);
     initTable();
     loadPassengers();
 }
-void passenger::setUsername(const QString &username)
+void passenger::setUserId(const QString &userID)
 {
-    currentUsername = username;
+    currentUserID = userID;
     loadPassengers(); // 设置用户名后立即加载乘客数据
 }
 void passenger::initTable()
@@ -56,26 +58,18 @@ void passenger::initTable()
 }
 int passenger::getUserId()
 {
-    if (currentUsername.isEmpty()) {
+    if (currentUserID.isEmpty()) {
         QMessageBox::warning(this, "错误", "用户未登录！");
         return -1;
     }
 
-    QSqlQuery query;
-    query.prepare("SELECT UserID FROM users WHERE Username = ?");
-    query.addBindValue(currentUsername);
-
-    if (!query.exec()) {
-        QMessageBox::critical(this, "错误", "查询用户失败：" + query.lastError().text());
+    bool ok = false;
+    int userId = currentUserID.toInt(&ok);
+    if (!ok || userId <= 0) {
+        QMessageBox::warning(this, "错误", "用户信息无效！");
         return -1;
     }
-
-    if (!query.next()) {
-        QMessageBox::warning(this, "错误", "用户不存在！");
-        return -1;
-    }
-
-    return query.value(0).toInt();
+    return userId;
 }
 void passenger::loadPassengers()
 {
@@ -87,59 +81,14 @@ void passenger::loadPassengers()
     // 清空表格
     ui->table_passengers->setRowCount(0);
 
-    QSqlQuery query;
-    query.prepare("SELECT PassengerID, Name, IDCard, Phone FROM passengers WHERE UserID = ? ORDER BY CreatedTime DESC");
-    query.addBindValue(userId);
+    NetworkClient *client = NetworkManager::instance()->client();
+    connect(client, &NetworkClient::responseReceived,
+            this, &passenger::onGetPassengersResponse, Qt::UniqueConnection);
 
-    if (!query.exec()) {
-        QMessageBox::critical(this, "错误", "加载乘客数据失败：" + query.lastError().text());
-        return;
-    }
+    QJsonObject data;
+    data["userID"] = QString::number(userId);
 
-    int row = 0;
-    while (query.next()) {
-        ui->table_passengers->insertRow(row);
-
-        // 获取数据
-        int passengerId = query.value(0).toInt();
-        QString name = query.value(1).toString();
-        QString idCard = query.value(2).toString();
-        QString phone = query.value(3).toString();
-
-        // 设置表格项
-        ui->table_passengers->setItem(row, 0, new QTableWidgetItem(name));
-        ui->table_passengers->setItem(row, 1, new QTableWidgetItem(idCard));
-        ui->table_passengers->setItem(row, 2, new QTableWidgetItem(phone));
-
-        // 添加删除按钮
-        QPushButton *btnDelete = new QPushButton("删除");
-        btnDelete->setProperty("passengerId", passengerId);
-        btnDelete->setProperty("passengerName", name);
-        connect(btnDelete, &QPushButton::clicked, this, &passenger::onDeletePassenger);
-
-        // 将按钮放入单元格
-        QWidget *widget = new QWidget();
-        QHBoxLayout *layout = new QHBoxLayout(widget);
-        layout->addWidget(btnDelete);
-        layout->setAlignment(Qt::AlignCenter);
-        layout->setContentsMargins(2, 2, 2, 2);
-        widget->setLayout(layout);
-
-        ui->table_passengers->setCellWidget(row, 3, widget);
-
-        row++;
-    }
-
-    // 如果没有数据，显示提示
-    if (row == 0) {
-        ui->table_passengers->setRowCount(1);
-        ui->table_passengers->setItem(0, 0, new QTableWidgetItem("暂无乘客信息"));
-        for (int i = 1; i < 4; i++) {
-            ui->table_passengers->setItem(0, i, new QTableWidgetItem(""));
-        }
-        // 合并单元格显示提示信息
-        ui->table_passengers->setSpan(0, 0, 1, 4);
-    }
+    client->sendRequest(MSG_GET_PASSENGERS, data);
 }
 bool passenger::validateInput()
 {
@@ -203,31 +152,22 @@ void passenger::on_btn_add_clicked()
     QString idCard = ui->edit_idcard->text().trimmed();
     QString phone = ui->edit_phone->text().trimmed();
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO passengers (UserID, Name, IDCard, Phone) VALUES (?, ?, ?, ?)");
-    query.addBindValue(userId);
-    query.addBindValue(name);
-    query.addBindValue(idCard);
-    query.addBindValue(phone);
+    NetworkClient *client = NetworkManager::instance()->client();
+    connect(client, &NetworkClient::responseReceived,
+            this, &passenger::onAddPassengerResponse, Qt::UniqueConnection);
 
-    if (query.exec()) {
-        QMessageBox::information(this, "成功", "乘客添加成功！");
-        clearInput();
-        loadPassengers(); // 刷新列表
-    } else {
-        QString error = query.lastError().text();
-        if (error.contains("unique_user_idcard")) {
-            QMessageBox::warning(this, "错误", "该身份证号码已存在！");
-        } else {
-            QMessageBox::critical(this, "错误", "添加失败：" + error);
-        }
-    }
+    QJsonObject data;
+    data["userID"] = QString::number(userId);
+    data["name"] = name;
+    data["idCard"] = idCard;
+    data["phone"] = phone;
+
+    client->sendRequest(MSG_ADD_PASSENGER, data);
 }
 
 void passenger::on_btn_refresh_clicked()
 {
     loadPassengers();
-    QMessageBox::information(this, "提示", "乘客列表已刷新！");
 }
 
 void passenger::on_btn_close_clicked()
@@ -253,15 +193,112 @@ void passenger::onDeletePassenger()
         return;
     }
 
-    QSqlQuery query;
-    query.prepare("DELETE FROM passengers WHERE PassengerID = ?");
-    query.addBindValue(passengerId);
+    NetworkClient *client = NetworkManager::instance()->client();
+    connect(client, &NetworkClient::responseReceived,
+            this, &passenger::onDeletePassengerResponse, Qt::UniqueConnection);
 
-    if (query.exec()) {
-        QMessageBox::information(this, "成功", "乘客删除成功！");
-        loadPassengers(); // 刷新列表
+    QJsonObject data;
+    data["passengerID"] = passengerId;
+
+    client->sendRequest(MSG_DELETE_PASSENGER, data);
+}
+
+void passenger::onGetPassengersResponse(int msgType, bool success, const QString &message, const QJsonObject &data)
+{
+    if (msgType != MSG_GET_PASSENGERS_RESPONSE) {
+        return;
+    }
+
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &passenger::onGetPassengersResponse);
+
+    if (!success) {
+        QMessageBox::warning(this, "错误", message);
+        return;
+    }
+
+    QJsonArray passengers = data["passengers"].toArray();
+    ui->table_passengers->setRowCount(0);
+
+    int row = 0;
+    for (const QJsonValue &value : passengers) {
+        QJsonObject passengerObj = value.toObject();
+        ui->table_passengers->insertRow(row);
+
+        int passengerId = passengerObj["passengerID"].toInt();
+        QString name = passengerObj["name"].toString();
+        QString idCard = passengerObj["idCard"].toString();
+        QString phone = passengerObj["phone"].toString();
+
+        ui->table_passengers->setItem(row, 0, new QTableWidgetItem(name));
+        ui->table_passengers->setItem(row, 1, new QTableWidgetItem(idCard));
+        ui->table_passengers->setItem(row, 2, new QTableWidgetItem(phone));
+
+        QPushButton *btnDelete = new QPushButton("删除");
+        btnDelete->setProperty("passengerId", passengerId);
+        btnDelete->setProperty("passengerName", name);
+        connect(btnDelete, &QPushButton::clicked, this, &passenger::onDeletePassenger);
+
+        QWidget *widget = new QWidget();
+        QHBoxLayout *layout = new QHBoxLayout(widget);
+        layout->addWidget(btnDelete);
+        layout->setAlignment(Qt::AlignCenter);
+        layout->setContentsMargins(2, 2, 2, 2);
+        widget->setLayout(layout);
+        ui->table_passengers->setCellWidget(row, 3, widget);
+
+        row++;
+    }
+
+    if (row == 0) {
+        ui->table_passengers->setRowCount(1);
+        ui->table_passengers->setItem(0, 0, new QTableWidgetItem("暂无乘客信息"));
+        for (int i = 1; i < 4; ++i) {
+            ui->table_passengers->setItem(0, i, new QTableWidgetItem(""));
+        }
+        ui->table_passengers->setSpan(0, 0, 1, 4);
+    }
+}
+
+void passenger::onAddPassengerResponse(int msgType, bool success, const QString &message, const QJsonObject &data)
+{
+    Q_UNUSED(data);
+
+    if (msgType != MSG_ADD_PASSENGER_RESPONSE) {
+        return;
+    }
+
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &passenger::onAddPassengerResponse);
+
+    if (success) {
+        QMessageBox::information(this, "成功", "乘客添加成功！");
+        clearInput();
+        loadPassengers();
     } else {
-        QMessageBox::critical(this, "错误", "删除失败：" + query.lastError().text());
+        QMessageBox::warning(this, "错误", message);
+    }
+}
+
+void passenger::onDeletePassengerResponse(int msgType, bool success, const QString &message, const QJsonObject &data)
+{
+    Q_UNUSED(data);
+
+    if (msgType != MSG_DELETE_PASSENGER_RESPONSE) {
+        return;
+    }
+
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &passenger::onDeletePassengerResponse);
+
+    if (success) {
+        QMessageBox::information(this, "成功", "乘客删除成功！");
+        loadPassengers();
+    } else {
+        QMessageBox::warning(this, "错误", message);
     }
 }
 passenger::~passenger()

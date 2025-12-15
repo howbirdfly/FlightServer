@@ -2,6 +2,7 @@
 #include "ui_sign_in.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QFile>
 #include "networkmanager.h"
 #include "protocol.h"
 
@@ -10,6 +11,15 @@ Sign_in::Sign_in(QWidget *parent)
     , ui(new Ui::Sign_in)
 {
     ui->setupUi(this);
+    
+    // 加载样式（使用与登录页面相同的样式）
+    QFile qssFile(":/styles/style.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 style.qss";
+    }
 }
 
 Sign_in::~Sign_in()

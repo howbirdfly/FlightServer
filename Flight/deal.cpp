@@ -12,6 +12,9 @@
 #include <QTableWidgetItem>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QFile>
+#include <QIntValidator>
+#include <QLineEdit>
 #include "mainwindow.h"
 #include "userprofile.h"
 #include "networkmanager.h"
@@ -26,6 +29,15 @@ Deal::Deal(QWidget *parent)
     ui->dateEdit->setDate(QDate::currentDate());
     ui->dateEdit->setMinimumDate(QDate::currentDate());
     ui->stackedWidget->setCurrentWidget(ui->page_tickets);
+    
+    // 加载样式
+    QFile qssFile(":/styles/Dealstyle.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 Dealstyle.qss";
+    }
 }
 
 Deal::Deal(const QString &userID, QWidget *parent)
@@ -53,10 +65,10 @@ Deal::Deal(const QString &userID, QWidget *parent)
     // 将其添加到 stackedWidget (页面栈) 中
     ui->stackedWidget->addWidget(m_favoriteDialogPage);
 
-    // 连接信号：从收藏夹点击“返回”时，回到票务搜索页
+    // 连接信号：从收藏夹点击"返回"时，回到票务搜索页
     connect(m_favoriteDialogPage, &favorite_dialog::backRequested, this, &Deal::showTicketSearchPage);
 
-    //连接信号：从个人中心点击“我的收藏”时，跳转到收藏夹
+    //连接信号：从个人中心点击"我的收藏"时，跳转到收藏夹
     connect(m_userProfilePage, &UserProfile::myFavoritesRequested, this, [=](){
         m_favoriteDialogPage->refreshFavoriteList();
         ui->stackedWidget->setCurrentWidget(m_favoriteDialogPage);
@@ -74,7 +86,15 @@ Deal::Deal(const QString &userID, QWidget *parent)
         this->close();
     });
     ui->stackedWidget->setCurrentWidget(ui->page_tickets);
-
+    
+    // 加载样式
+    QFile qssFile(":/styles/Dealstyle.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 Dealstyle.qss";
+    }
 }
 
 Deal::~Deal()
@@ -337,4 +357,20 @@ void Deal::on_favorite_button_clicked()
 
     // 3. 切换界面显示到收藏夹页面
     ui->stackedWidget->setCurrentWidget(m_favoriteDialogPage);
+}
+
+void Deal::on_lineEdit_pageNum_returnPressed()
+{
+    // 分页功能暂未实现，此函数为空实现
+    // TODO: 实现分页跳转功能
+    // FlightServer版本中deal.ui没有分页控件，所以此函数为空实现
+    Q_UNUSED(ui);
+}
+
+void Deal::updatePageContainerText()
+{
+    // 分页功能暂未实现，此函数为空实现
+    // TODO: 实现分页文本更新功能
+    // FlightServer版本中deal.ui没有分页控件，所以此函数为空实现
+    Q_UNUSED(ui);
 }
