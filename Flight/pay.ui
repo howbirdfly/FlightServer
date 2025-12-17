@@ -13,79 +13,11 @@
   <property name="windowTitle">
    <string>收银台</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <property name="styleSheet">
-   <string notr="true">/* 全局背景和字体 */
-QWidget#Pay {
-    background-color: #f0f2f5;
-    font-family: &quot;Microsoft YaHei&quot;, &quot;Segoe UI&quot;, sans-serif;
-}
-
-/* 标题样式 */
-QLabel#label_title {
-    color: #2c3e50;
-    font-size: 22px;
-    font-weight: bold;
-    padding-left: 10px;
-}
-
-/* 通用按钮样式 */
-QPushButton {
-    background-color: #ffffff;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    color: #606266;
-    padding: 6px 16px;
-    font-size: 14px;
-}
-
-QPushButton:hover {
-    background-color: #ecf5ff;
-    color: #409eff;
-    border-color: #c6e2ff;
-}
-
-QPushButton:pressed {
-    background-color: #d9ecff;
-    border-color: #409eff;
-}
-
-/* 确认支付按钮（强调色） */
-QPushButton#btn_confirm {
-    background-color: #409eff;
-    color: white;
-    border: none;
-}
-QPushButton#btn_confirm:hover {
-    background-color: #66b1ff;
-}
-QPushButton#btn_confirm:pressed {
-    background-color: #3a8ee6;
-}
-
-/* 分组框样式 */
-QGroupBox {
-    background-color: #ffffff;
-    border: 1px solid #e4e7ed;
-    border-radius: 8px;
-    margin-top: 10px;
-    padding-top: 20px;
-    font-size: 14px;
-    color: #303133;
-}
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left;
-    padding: 0 10px;
-    color: #409eff;
-    font-weight: bold;
-}
-
-/* 图片占位 Label 样式 */
-QLabel#label_wechat_img, QLabel#label_alipay_img {
-    border: 1px dashed #dcdfe6;
-    background-color: #f9fafc;
-    color: #909399;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -146,10 +78,10 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
            <string>支付金额：</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
+           <enum>Qt::AutoText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -198,7 +130,7 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -223,7 +155,7 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -232,18 +164,18 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_label">
         <property name="sizeConstraint">
-         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+         <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_wechat">
           <property name="layoutDirection">
-           <enum>Qt::LayoutDirection::LeftToRight</enum>
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
            <string>微信支付</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -253,7 +185,7 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
            <string>支付宝支付</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -267,7 +199,7 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
            <string>充值金额：</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -333,4 +265,3 @@ QLabel#label_wechat_img, QLabel#label_alipay_img {
  <resources/>
  <connections/>
 </ui>
-

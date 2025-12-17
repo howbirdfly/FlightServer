@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>744</height>
+    <width>779</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DockWidget</string>
+   <string>乘客</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QGroupBox" name="groupBox">
@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>551</width>
+      <width>741</width>
       <height>161</height>
      </rect>
     </property>
@@ -30,9 +30,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
-       <width>381</width>
-       <height>126</height>
+       <y>40</y>
+       <width>451</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout">
@@ -62,9 +62,6 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="edit_idcard">
-        <property name="inputMask">
-         <string>&gt;NNNNNNNNNNNNNNNNNN</string>
-        </property>
         <property name="maxLength">
          <number>18</number>
         </property>
@@ -82,9 +79,6 @@
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="edit_phone">
-        <property name="inputMask">
-         <string>&gt;99999999999</string>
-        </property>
         <property name="maxLength">
          <number>11</number>
         </property>
@@ -98,10 +92,10 @@
     <widget class="QPushButton" name="btn_add">
      <property name="geometry">
       <rect>
-       <x>432</x>
-       <y>47</y>
+       <x>510</x>
+       <y>60</y>
        <width>91</width>
-       <height>41</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -114,7 +108,7 @@
      <rect>
       <x>20</x>
       <y>180</y>
-      <width>521</width>
+      <width>741</width>
       <height>441</height>
      </rect>
     </property>
@@ -126,7 +120,7 @@
       <rect>
        <x>15</x>
        <y>41</y>
-       <width>501</width>
+       <width>691</width>
        <height>381</height>
       </rect>
      </property>
@@ -164,31 +158,31 @@
      </column>
     </widget>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QPushButton" name="btn_close">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>630</y>
-      <width>521</width>
-      <height>81</height>
+      <x>440</x>
+      <y>650</y>
+      <width>171</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="btn_refresh">
-       <property name="text">
-        <string>刷新</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btn_close">
-       <property name="text">
-        <string>关闭</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>关闭</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_refresh">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>650</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>刷新</string>
+    </property>
    </widget>
   </widget>
  </widget>

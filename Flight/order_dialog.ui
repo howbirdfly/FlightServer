@@ -14,7 +14,7 @@
    <string>填写订单信息</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);</string>
+   <string notr="true"/>
   </property>
   <widget class="QGroupBox" name="groupBox_ticket">
    <property name="geometry">
@@ -26,7 +26,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(0, 0, 0);</string>
+    <string notr="true"/>
    </property>
    <property name="title">
     <string>票务信息</string>
@@ -280,7 +280,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(0, 0, 0);</string>
+    <string notr="true"/>
    </property>
    <property name="title">
     <string>乘客信息</string>
@@ -425,7 +425,7 @@
      <rect>
       <x>380</x>
       <y>65</y>
-      <width>51</width>
+      <width>61</width>
       <height>20</height>
      </rect>
     </property>
@@ -440,8 +440,8 @@
   <widget class="QPushButton" name="btn_confirm">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>380</y>
+     <x>240</x>
+     <y>390</y>
      <width>80</width>
      <height>30</height>
     </rect>
@@ -453,14 +453,30 @@
   <widget class="QPushButton" name="btn_cancel">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>380</y>
+     <x>360</x>
+     <y>390</y>
      <width>80</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string>取消</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_balance">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>370</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string>color: red; font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

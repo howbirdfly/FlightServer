@@ -374,3 +374,7 @@ void Deal::updatePageContainerText()
     // FlightServer版本中deal.ui没有分页控件，所以此函数为空实现
     Q_UNUSED(ui);
 }
+
+void Deal::on_home_clicked(){
+    this->showTicketSearchPage();
+}

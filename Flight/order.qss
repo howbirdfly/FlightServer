@@ -1,0 +1,85 @@
+QGroupBox {
+    /* 浅绿色背景 */
+    background-color: #e8f5e9;
+
+    /* 强烈的凹陷边框效果 */
+    border-top: 5px solid #c8e6c9;     /* 左上浅色 - 光照效果 */
+    border-left: 5px solid #c8e6c9;
+    border-right: 5px solid #4caf50;   /* 右下深色 - 阴影效果 */
+    border-bottom: 5px solid #4caf50;
+
+    /* 边框圆角 */
+    border-radius: 10px;
+
+    /* 内边距 */
+    padding-top: 25px;  /* 为标题留出空间 */
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+
+    /* 标题样式 */
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1b5e20;  /* 深绿色标题 */
+
+    /* 标题位置 */
+    margin-top: 10px;
+}
+QPushButton {
+    background-color: #2a8c66;
+    color: white;
+    border: 1px solid #1e6b4d;
+    border-radius: 6px;
+    padding: 5px 15px;                   /* 减少内边距 */
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    min-height: 30px;                    /* 设置最小高度 */
+    min-width: 80px;                     /* 设置最小宽度 */
+
+    /* 可选：渐变效果 */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #31a074,
+                                stop:1 #2a8c66);
+}
+/* 悬浮效果 */
+QPushButton:hover {
+    background-color: #31a074;            /* 更亮的绿色 */
+    border: 1px solid #247c58;
+
+    /* 如果使用渐变 */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #38b07e,
+                                stop:1 #2f976c);
+
+    /* 可选：添加轻微阴影增强悬浮感 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 按下效果 */
+QPushButton:pressed {
+    background-color: #247c58;            /* 更深的绿色 */
+    border: 1px solid #1c5c42;
+
+    /* 如果使用渐变 */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #2a8c66,
+                                stop:1 #216c4e);
+
+    /* 模拟按下效果 */
+    padding-top: 11px;
+    padding-bottom: 9px;
+}
+
+/* 禁用状态 */
+QPushButton:disabled {
+    background-color: #a0c0b0;            /* 灰绿色 */
+    color: #7f968b;                       /* 灰色文字 */
+    border: 1px solid #8fa89c;
+}
+QDialog {
+    background-color: #F9F9F9;    /* 米白色 */
+    border: 1px solid #D2B48C;  /* 可选边框 */
+    border-radius: 8px;
+}

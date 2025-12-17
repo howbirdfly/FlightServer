@@ -6,148 +6,164 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>683</width>
-    <height>438</height>
+    <width>1154</width>
+    <height>687</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>注册</string>
   </property>
-  <widget class="QLineEdit" name="Sign_in_UsernameT">
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>90</y>
-     <width>171</width>
-     <height>27</height>
+     <x>250</x>
+     <y>160</y>
+     <width>711</width>
+     <height>361</height>
     </rect>
    </property>
-   <property name="placeholderText">
-    <string>请输入你的用户名...</string>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
    </property>
-  </widget>
-  <widget class="QLineEdit" name="Sign_in_PassWordT">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>170</y>
-     <width>171</width>
-     <height>27</height>
-    </rect>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
    </property>
-   <property name="inputMask">
-    <string/>
-   </property>
-   <property name="placeholderText">
-    <string>请输入你的密码...</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="Sign_in_PassWordAT">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>220</y>
-     <width>171</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>请确认你的密码...</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Sign_in_Username">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>90</y>
-     <width>69</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>用户名：</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Sign_in_PassWord">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>180</y>
-     <width>69</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>密码：</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Sign_in_PassWordA">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>230</y>
-     <width>69</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>确认密码：</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Sign_in_Button">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>270</y>
-     <width>99</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>注册</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Sign_in_Cencel">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>270</y>
-     <width>99</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>取消</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>130</y>
-     <width>69</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>账户ID：</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="ID">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>130</y>
-     <width>171</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string/>
-   </property>
-   <property name="placeholderText">
-    <string>ID为账号的唯一凭证</string>
-   </property>
+   <widget class="QLabel" name="Sign_in_Username">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>60</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>用户名：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>110</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>账户ID：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Sign_in_PassWord">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>160</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>密码：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Sign_in_PassWordA">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>220</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>确认密码：</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ID">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>110</y>
+      <width>171</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>ID为账号的唯一凭证</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Sign_in_UsernameT">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>60</y>
+      <width>171</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>请输入你的用户名...</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Sign_in_PassWordT">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>160</y>
+      <width>171</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>请输入你的密码...</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Sign_in_PassWordAT">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>220</y>
+      <width>171</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>请确认你的密码...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Sign_in_Cencel">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>270</y>
+      <width>99</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>取消</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Sign_in_Button">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>270</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>注册</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

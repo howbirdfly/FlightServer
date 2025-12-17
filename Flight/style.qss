@@ -180,4 +180,3 @@ QMessageBox QLabel#qt_msgboxex_icon_label {
     min-width: 32px;
     min-height: 32px;
 }
-

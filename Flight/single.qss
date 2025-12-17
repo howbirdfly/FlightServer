@@ -31,4 +31,3 @@ QPushButton#btn_refresh{
     border: 1px solid #0a291f;
     border-radius: 4px;             /* 稍微圆角 */
 }
-

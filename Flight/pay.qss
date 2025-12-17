@@ -1,0 +1,95 @@
+QGroupBox {
+    /* 背景色 */
+    background-color: #F0F8F0;  /* 浅绿色背景 */
+
+    /* 凹陷边框效果 */
+    border: 2px solid #C0D8C0;  /* 主边框色 */
+    border-radius: 8px;
+    padding-top: 10px;
+    margin-top: 10px;
+
+    /* 凹陷阴影效果 */
+    border-top-color: #A0C0A0;    /* 上边框更深 */
+    border-left-color: #A0C0A0;   /* 左边框更深 */
+    border-right-color: #E0F0E0;  /* 右边框更浅 */
+    border-bottom-color: #E0F0E0; /* 下边框更浅 */
+}
+
+/* 标题样式 */
+QGroupBox::title {
+    color: #2E8B57;              /* 海绿色文字 */
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    padding: 0 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+QLabel#label_title {
+    /* 背景色 - 墨绿色 */
+    background-color: #006400;  /* 森林绿 */
+
+    /* 文字样式 */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+
+    /* 边框和边距 */
+    border: 2px solid #004d00;  /* 更深的墨绿边框 */
+    border-radius: 8px;
+    padding: 10px 15px;
+
+    /* 文本对齐 */
+    qproperty-alignment: AlignCenter;
+}
+QWidget#Pay {
+    background-color: #F9F9F9;    /* 米白色 */
+    border: 1px solid #D2B48C;  /* 可选边框 */
+    border-radius: 8px;
+}
+/* 通用基础样式 */
+QPushButton {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    min-height: 30px;
+    min-width: 80px;
+}
+
+/* 确认按钮 - 草绿色 */
+QPushButton#btn_confirm {
+    background-color: #98FB98;           /* 淡草绿色 */
+    color: #2F4F4F;                      /* 深石板灰文字 */
+    border-color: #7CCD7C;               /* 草绿边框 */
+}
+
+QPushButton#btn_confirm:hover {
+    background-color: #7CCD7C;           /* 悬停草绿 */
+    color: #333333;
+}
+
+QPushButton#btn_confirm:pressed {
+    background-color: #66CDAA;           /* 按下翡翠绿 */
+    color: white;
+}
+
+/* 取消按钮 - 白色 */
+QPushButton#btn_cancel {
+    background-color: white;              /* 白色背景 */
+    color: #666666;                       /* 灰色文字 */
+    border-color: #CCCCCC;                /* 浅灰边框 */
+}
+
+QPushButton#btn_cancel:hover {
+    background-color: #F8F8F8;            /* 悬停浅灰 */
+    border-color: #999999;                /* 边框变深 */
+    color: #333333;                       /* 文字变深 */
+}
+
+QPushButton#btn_cancel:pressed {
+    background-color: #E0E0E0;            /* 按下灰色 */
+}

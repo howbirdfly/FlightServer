@@ -135,7 +135,7 @@ QHeaderView::section {
       <number>6</number>
      </property>
      <property name="sizeConstraint">
-      <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+      <enum>QLayout::SetNoConstraint</enum>
      </property>
      <item>
       <widget class="QLabel" name="label_title">
@@ -240,7 +240,7 @@ QHeaderView::section {
          <string>开始日期：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -253,7 +253,7 @@ QHeaderView::section {
          <string>交通类型：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -319,7 +319,7 @@ QHeaderView::section {
          <string>目的地：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -329,7 +329,7 @@ QHeaderView::section {
          <string>出发地：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -339,7 +339,7 @@ QHeaderView::section {
          <string>结束日期：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -374,16 +374,16 @@ QHeaderView::section {
       <bool>true</bool>
      </property>
      <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
      <property name="verticalScrollMode">
-      <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
      <property name="horizontalScrollMode">
-      <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
      <property name="showGrid">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>

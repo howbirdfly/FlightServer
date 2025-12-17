@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>700</height>
+    <width>1006</width>
+    <height>841</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,92 +20,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">/* ================= 全局设置 ================= */
-QWidget {
-    font-family: &quot;Microsoft YaHei&quot;, &quot;Segoe UI&quot;, sans-serif;
-    color: #ffffff; /* 全局白色文字 */
-}
-
-QWidget#UserProfile {
-    background-color: #2d2d2d;
-    /* 全局深色背景 */
-}
-
-/* ================= 按钮统一风格 ================= */
-QPushButton {
-    background-color: #606060;
-    border: 1px solid #ffffff;
-    border-radius: 6px;
-    padding: 8px 16px;
-    color: white;
-    font-size: 14px;
-    /* 模拟阴影效果 */
-    box-shadow: inset 2px 2px 4px #484848,
-                inset -2px -2px 4px #787878;
-}
-
-QPushButton:hover {
-    background-color: #646464;
-}
-
-QPushButton:pressed {
-    background-color: #404040;
-    border: 1px solid #555555;
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-right: 6px;
-    padding-bottom: 6px;
-
-    box-shadow: inset 4px 4px 8px #202020,
-                inset -4px -4px 8px #505050;
-}
-
-/* ================= 顶部导航栏 ================= */
-QWidget#widget {
-    background-color: #3b3b3b;
-    border-bottom: 1px solid #555555;
-}
-
-/* 标题 */
-QLabel#label {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;
-}
-
-/* ================= 卡片样式 ================= */
-QFrame#frame, QFrame#frame_2 {
-    background-color: #3b3b3b;
-    border-radius: 12px;
-    border: 1px solid #555555;
-}
-
-/* ================= 个人信息区 ================= */
-/* 头像框 */
-QLabel#label_2 {
-    background-color: #505050;
-    border-radius: 35px;
-    border: 2px solid #606060;
-    color: #cccccc;
-    qproperty-alignment: AlignCenter;
-}
-
-/* 表单标签 */
-QFormLayout QLabel {
-    color: #cccccc;
-    font-size: 14px;
-}
-
-/* 只读输入框 */
-QLineEdit[readOnly=&quot;true&quot;] {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #555555;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 500;
-    padding-bottom: 2px;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
@@ -117,7 +32,7 @@ QLineEdit[readOnly=&quot;true&quot;] {
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #3b3b3b;</string>
+    <string notr="true"/>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -138,12 +53,11 @@ QLineEdit[readOnly=&quot;true&quot;] {
       <x>880</x>
       <y>5</y>
       <width>80</width>
-      <height>30</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>返回</string>
@@ -160,13 +74,13 @@ color: rgb(0, 0, 0);</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #3b3b3b;</string>
+    <string notr="true"/>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Shape::StyledPanel</enum>
+    <enum>QFrame::StyledPanel</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Shadow::Raised</enum>
+    <enum>QFrame::Raised</enum>
    </property>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -193,7 +107,7 @@ color: rgb(0, 0, 0);</string>
       <x>570</x>
       <y>40</y>
       <width>291</width>
-      <height>121</height>
+      <height>123</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -260,19 +174,19 @@ color: rgb(0, 0, 0);</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>250</y>
+     <y>280</y>
      <width>981</width>
-     <height>441</height>
+     <height>521</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #3b3b3b;</string>
+    <string notr="true"/>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Shape::StyledPanel</enum>
+    <enum>QFrame::StyledPanel</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Shadow::Raised</enum>
+    <enum>QFrame::Raised</enum>
    </property>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
@@ -299,7 +213,7 @@ color: rgb(0, 0, 0);</string>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="btn_recharge">
        <property name="text">
         <string>充值</string>
        </property>
@@ -317,10 +231,10 @@ color: rgb(0, 0, 0);</string>
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>40</y>
-      <width>271</width>
-      <height>311</height>
+      <x>620</x>
+      <y>30</y>
+      <width>281</width>
+      <height>341</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">

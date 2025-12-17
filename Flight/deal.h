@@ -33,6 +33,8 @@ private slots:
     void onAddFavoriteResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     void on_lineEdit_pageNum_returnPressed();
     void updatePageContainerText();
+    void on_home_clicked();
+
 private:
     void initTable();
     void searchTickets();

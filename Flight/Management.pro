@@ -1,4 +1,4 @@
-QT       += core gui widgets network
+QT       += core gui widgets network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -57,3 +57,14 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource.qrc
+
+
+DISTFILES += \
+    Dealstyle.qss \
+    favorite.qss \
+    order.qss \
+    passenger.qss \
+    pay.qss \
+    single.qss \
+    style.qss \
+    userprofile.qss

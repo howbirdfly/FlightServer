@@ -133,4 +133,3 @@ QTableWidget {
     selection-background-color: #e8f1eb;     /* 选中行背景色 */
     selection-color: #000000;                /* 选中行文字黑色 */
 }
-

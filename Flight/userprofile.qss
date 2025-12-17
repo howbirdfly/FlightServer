@@ -149,4 +149,3 @@ QFrame#frame_2::after {
     border: 2px inset #505050;
     margin: 2px;
 }
-
