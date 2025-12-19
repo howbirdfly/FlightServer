@@ -233,6 +233,8 @@ void UserProfile::onGetUserInfoResponse(int msgType, bool success,
         }
         
         qDebug() << "用户信息加载成功：" << username;
+        // 通知外部（如 Deal）头像或用户信息已更新
+        emit avatarUpdated();
     } else {
         qDebug() << "获取用户信息失败：" << message;
         QMessageBox::warning(this, "错误", "获取用户信息失败：" + message);

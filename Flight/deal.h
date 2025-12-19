@@ -31,18 +31,23 @@ private slots:
     void showTicketSearchPage();
     void onSearchResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     void onAddFavoriteResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
+    // 获取头像信息的响应槽
+    void onGetUserInfoForAvatar(int msgType, bool success, const QString &message, const QJsonObject &data);
     void on_lineEdit_pageNum_returnPressed();
     void updatePageContainerText();
     void on_home_clicked();
 
 private:
     void initTable();
+    void setCircularAvatar(const QByteArray &avatarData);  // 圆形头像绘制
+    void getData(const QString &userID);                   // 获取头像数据
     void searchTickets();
-    int getTotalPage();
-    void initPagination();
-    void getData(const QString &userID);              // 添加
-    void setCircularAvatar(const QByteArray &avatarData);  // 添加
+    int getTotalPage();      // 预留：如需本地计算分页（现在由服务端完成）
+    void initPagination();   // 初始化分页控件和信号
     QString currentUserID;
+    int currentPage = 1;
+    int totalPage = 0;
+
     Ui::Deal *ui;
     Single_Center *m_personalCenterPage;
     UserProfile *m_userProfilePage;

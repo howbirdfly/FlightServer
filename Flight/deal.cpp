@@ -15,6 +15,11 @@
 #include <QFile>
 #include <QIntValidator>
 #include <QLineEdit>
+#include <QPixmap>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPen>
+#include <QSize>
 #include "mainwindow.h"
 #include "userprofile.h"
 #include "networkmanager.h"
@@ -38,6 +43,9 @@ Deal::Deal(QWidget *parent)
         qssFile.close();
         qDebug() << "成功加载 Dealstyle.qss";
     }
+
+    // 初始化分页（如果 UI 中有相关控件则启用）
+    initPagination();
 }
 
 Deal::Deal(const QString &userID, QWidget *parent)
@@ -85,6 +93,13 @@ Deal::Deal(const QString &userID, QWidget *parent)
         loginWindow->show();
         this->close();
     });
+    // 头像更新后，刷新右上角圆形头像
+    connect(m_userProfilePage, &UserProfile::avatarUpdated, this, [=](){
+        if (!currentUserID.isEmpty()) {
+            getData(currentUserID);
+        }
+    });
+
     ui->stackedWidget->setCurrentWidget(ui->page_tickets);
     
     // 加载样式
@@ -94,6 +109,14 @@ Deal::Deal(const QString &userID, QWidget *parent)
         this->setStyleSheet(styleSheet);
         qssFile.close();
         qDebug() << "成功加载 Dealstyle.qss";
+    }
+
+    // 初始化分页（如果 UI 中有相关控件则启用）
+    initPagination();
+
+    // 初始化头像（如果已登录）
+    if (!currentUserID.isEmpty()) {
+        getData(currentUserID);
     }
 }
 
@@ -112,6 +135,54 @@ void Deal::initTable()
     ui->tableWidget_tickets->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget_tickets->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget_tickets->verticalHeader()->setVisible(false);
+}
+
+// 绘制 40x40 的圆形头像到 Avatar 按钮
+void Deal::setCircularAvatar(const QByteArray &avatarData)
+{
+    if (!ui->Avatar) return;
+
+    QPixmap pixmap;
+    if (!avatarData.isEmpty() && pixmap.loadFromData(avatarData)) {
+        QPixmap circularPixmap(40, 40);
+        circularPixmap.fill(Qt::transparent);
+
+        QPainter painter(&circularPixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+        QPainterPath path;
+        path.addEllipse(0, 0, 40, 40);
+        painter.setClipPath(path);
+
+        QPixmap scaled = pixmap.scaled(40, 40, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        painter.drawPixmap(0, 0, scaled);
+
+        painter.setPen(QPen(QColor(255, 255, 255, 153), 1));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawEllipse(0, 0, 39, 39);
+
+        ui->Avatar->setIcon(QIcon(circularPixmap));
+        ui->Avatar->setIconSize(QSize(40, 40));
+    }
+}
+
+// 通过网络从服务端获取头像信息
+void Deal::getData(const QString &userID)
+{
+    qDebug() << "Deal::getData called with userID:" << userID;
+    if (userID.isEmpty()) return;
+
+    NetworkClient *client = NetworkManager::instance()->client();
+
+    // 连接响应信号（专用于头像）
+    connect(client, &NetworkClient::responseReceived,
+            this, &Deal::onGetUserInfoForAvatar, Qt::UniqueConnection);
+
+    QJsonObject data;
+    data["userID"] = userID;
+
+    client->sendRequest(MSG_GET_USER_INFO, data);
 }
 
 void Deal::searchTickets()
@@ -141,6 +212,9 @@ void Deal::searchTickets()
     if (!currentUserID.isEmpty()) {
         data["userID"] = currentUserID;  // 用于服务端返回收藏状态
     }
+    // 分页参数（与 Management 的 PAGE_SIZE 一致）
+    data["page"] = currentPage;
+    data["pageSize"] = 50;
     
     // 发送查询请求
     client->sendRequest(MSG_SEARCH_TICKETS, data);
@@ -163,6 +237,14 @@ void Deal::onSearchResponse(int msgType, bool success,
     if (!success) {
         QMessageBox::warning(this, "错误", message);
         return;
+    }
+    
+    // 解析分页信息（如果有）
+    if (data.contains("totalPage")) {
+        totalPage = data["totalPage"].toInt();
+    }
+    if (data.contains("currentPage")) {
+        currentPage = data["currentPage"].toInt();
     }
     
     // 解析票务列表
@@ -223,6 +305,9 @@ void Deal::onSearchResponse(int msgType, bool success,
     if (tickets.isEmpty()) {
         QMessageBox::information(this, "提示", "未找到符合条件的票务");
     }
+
+    // 更新分页显示
+    updatePageContainerText();
 }
 
 void Deal::on_btn_search_clicked()
@@ -359,22 +444,132 @@ void Deal::on_favorite_button_clicked()
     ui->stackedWidget->setCurrentWidget(m_favoriteDialogPage);
 }
 
+// 头像信息响应处理
+void Deal::onGetUserInfoForAvatar(int msgType, bool success,
+                                  const QString &message, const QJsonObject &data)
+{
+    Q_UNUSED(message);
+
+    if (msgType != MSG_GET_USER_INFO_RESPONSE) {
+        return;
+    }
+
+    // 断开与头像相关的连接
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &Deal::onGetUserInfoForAvatar);
+
+    if (!success) {
+        qDebug() << "获取用户头像失败：" << message;
+        return;
+    }
+
+    QString avatarBase64 = data["avatar"].toString();
+    if (!avatarBase64.isEmpty()) {
+        QByteArray avatarData = QByteArray::fromBase64(avatarBase64.toLatin1());
+        setCircularAvatar(avatarData);
+    }
+}
+
 void Deal::on_lineEdit_pageNum_returnPressed()
 {
-    // 分页功能暂未实现，此函数为空实现
-    // TODO: 实现分页跳转功能
-    // FlightServer版本中deal.ui没有分页控件，所以此函数为空实现
-    Q_UNUSED(ui);
+    // 若 UI 中没有分页控件，直接返回
+    if (!ui->lineEdit_pageNum || !ui->label_pageInfo) {
+        return;
+    }
+
+    if (totalPage == 0) {
+        QMessageBox::warning(this, "提示", "暂无数据，无法跳转！");
+        ui->lineEdit_pageNum->setText("");
+        return;
+    }
+
+    QString inputText = ui->lineEdit_pageNum->text().trimmed();
+    if (inputText.isEmpty()) {
+        QMessageBox::warning(this, "提示", "请输入有效页码！");
+        ui->lineEdit_pageNum->setText(QString::number(currentPage));
+        return;
+    }
+
+    bool isNumber = false;
+    int targetPage = inputText.toInt(&isNumber);
+    if (!isNumber) {
+        QMessageBox::warning(this, "提示", "页码必须是正整数！");
+        ui->lineEdit_pageNum->setText(QString::number(currentPage));
+        return;
+    }
+
+    if (targetPage < 1) {
+        targetPage = 1;
+    } else if (targetPage > totalPage) {
+        targetPage = totalPage;
+    }
+
+    currentPage = targetPage;
+    searchTickets();
 }
 
 void Deal::updatePageContainerText()
 {
-    // 分页功能暂未实现，此函数为空实现
-    // TODO: 实现分页文本更新功能
-    // FlightServer版本中deal.ui没有分页控件，所以此函数为空实现
-    Q_UNUSED(ui);
+    // UI 中没有这些控件时直接忽略
+    if (!ui->label_pageInfo || !ui->lineEdit_pageNum) {
+        return;
+    }
+
+    if (totalPage <= 0) {
+        ui->label_pageInfo->setText("  页 / 共 0 页");
+        ui->lineEdit_pageNum->setEnabled(false);
+        ui->lineEdit_pageNum->setText("");
+        if (ui->btn_prev) ui->btn_prev->setEnabled(false);
+        if (ui->btn_next) ui->btn_next->setEnabled(false);
+        return;
+    }
+
+    QString pageText = QString("  页 / 共 %1 页").arg(totalPage);
+    ui->label_pageInfo->setText(pageText);
+    ui->lineEdit_pageNum->setEnabled(true);
+    ui->lineEdit_pageNum->setText(QString::number(currentPage));
+
+    if (ui->btn_prev) ui->btn_prev->setEnabled(currentPage > 1);
+    if (ui->btn_next) ui->btn_next->setEnabled(currentPage < totalPage);
 }
 
 void Deal::on_home_clicked(){
     this->showTicketSearchPage();
+}
+
+// 初始化分页控件和信号（如果 UI 中存在这些控件）
+void Deal::initPagination()
+{
+    // 兼容没有分页控件的 UI：如果任何一个为 nullptr，直接返回
+    if (!ui->btn_prev || !ui->btn_next || !ui->lineEdit_pageNum || !ui->label_pageInfo) {
+        return;
+    }
+
+    ui->lineEdit_pageNum->setAlignment(Qt::AlignCenter);
+
+    QIntValidator *validator = new QIntValidator(1, 999, this);
+    ui->lineEdit_pageNum->setValidator(validator);
+
+    // 上一页
+    connect(ui->btn_prev, &QPushButton::clicked, this, [=](){
+        if (currentPage > 1) {
+            currentPage--;
+            searchTickets();
+        }
+    });
+
+    // 下一页
+    connect(ui->btn_next, &QPushButton::clicked, this, [=](){
+        if (currentPage < totalPage) {
+            currentPage++;
+            searchTickets();
+        }
+    });
+
+    // 页码回车跳转
+    connect(ui->lineEdit_pageNum, &QLineEdit::returnPressed,
+            this, &Deal::on_lineEdit_pageNum_returnPressed);
+
+    updatePageContainerText();
 }

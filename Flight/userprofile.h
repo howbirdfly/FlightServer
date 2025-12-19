@@ -27,6 +27,7 @@ signals:
     void myOrdersRequested();
     void logoutRequested();
     void myFavoritesRequested();
+    void avatarUpdated();   // 当头像更新时通知外部（如 Deal 圆形头像）
 
 private slots:
     void on_btn_back_clicked();

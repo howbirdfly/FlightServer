@@ -472,76 +472,154 @@ void Server::handleUpdateUserInfo(QTcpSocket *client, const QJsonObject &data)
     }
 }
 
-// 处理查询票务
+// 处理查询票务（根据 Management 版 Deal 的逻辑改造，支持分页和收藏状态）
 void Server::handleSearchTickets(QTcpSocket *client, const QJsonObject &data)
 {
     QString from = data["from"].toString();
     QString to = data["to"].toString();
-    int page = data["page"].toInt(1);           // 添加
-    int pageSize = data["pageSize"].toInt(50);  // 添加
-    
+    QString dateStr = data["date"].toString();      // yyyy-MM-dd
+    QString type = data["type"].toString();         // 目前仅支持 Flight，可预留
+    QString userID = data["userID"].toString();     // 用于返回收藏状态
+    int page = data["page"].toInt(1);
+    int pageSize = data["pageSize"].toInt(50);
+
+    if (page <= 0) page = 1;
+    if (pageSize <= 0) pageSize = 50;
+
+    // 计算查询起始时间：取“用户选择的日期 00:00:00”和“当前时间”中的较大者
+    QDateTime now = QDateTime::currentDateTime();
+    QDate queryDate = QDate::fromString(dateStr, "yyyy-MM-dd");
+    QDateTime selectedStart(queryDate.isValid() ? queryDate : now.date(), QTime(0, 0, 0));
+    QDateTime startTime = selectedStart > now ? selectedStart : now;
+
     QSqlQuery query(db);
-    QString sql = "SELECT flight_id, flight_number, departure_city, arrival_city, departure_time, "
-                  "arrival_time, price, departure_airport, arrival_airport, airline_company, availableSeat "
-                  "FROM flight_info WHERE status = 'On Time' "
-                  "AND departure_time >= ? AND availableSeat > 0 ";
-    
+    QString baseSql = "FROM flight_info WHERE status = 'On Time' "
+                      "AND departure_time >= ? AND availableSeat > 0 ";
+
     if (!from.isEmpty()) {
-        sql += "AND departure_city LIKE ? ";
+        baseSql += "AND departure_city LIKE ? ";
     }
     if (!to.isEmpty()) {
-        sql += "AND arrival_city LIKE ? ";
+        baseSql += "AND arrival_city LIKE ? ";
     }
-    
-    sql += "ORDER BY departure_time ASC";
-    
-    query.prepare(sql);
-    query.addBindValue(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"));
-    
+
+    // 目前仅有航班业务，如果以后有火车/汽车，可在此扩展 type 过滤
+    Q_UNUSED(type);
+
+    // 先查询总条数
+    QString countSql = "SELECT COUNT(*) " + baseSql;
+    if (!query.prepare(countSql)) {
+        sendResponse(client, MSG_SEARCH_RESPONSE, false,
+                     "统计总数预处理失败：" + query.lastError().text());
+        return;
+    }
+
+    query.addBindValue(startTime);
     if (!from.isEmpty()) {
         query.addBindValue(from + "%");
     }
     if (!to.isEmpty()) {
         query.addBindValue(to + "%");
     }
-    
+
+    int totalCount = 0;
+    if (query.exec() && query.next()) {
+        totalCount = query.value(0).toInt();
+    } else {
+        sendResponse(client, MSG_SEARCH_RESPONSE, false,
+                     "统计总数执行失败：" + query.lastError().text());
+        return;
+    }
+
+    int totalPage = 0;
+    if (totalCount > 0) {
+        totalPage = (totalCount + pageSize - 1) / pageSize;
+    }
+    if (totalPage > 0 && page > totalPage) {
+        page = totalPage;
+    }
+
+    // 再查询当前页数据
+    QString dataSql = "SELECT flight_id, flight_number, departure_city, arrival_city, departure_time, "
+                      "arrival_time, price, departure_airport, arrival_airport, airline_company, availableSeat "
+                      + baseSql +
+                      " ORDER BY departure_time ASC LIMIT ? OFFSET ?";
+
+    query.clear();
+    if (!query.prepare(dataSql)) {
+        sendResponse(client, MSG_SEARCH_RESPONSE, false,
+                     "查询预处理失败：" + query.lastError().text());
+        return;
+    }
+
+    query.addBindValue(startTime);
+
+    if (!from.isEmpty()) {
+        query.addBindValue(from + "%");
+    }
+    if (!to.isEmpty()) {
+        query.addBindValue(to + "%");
+    }
+
+    int limit = pageSize;
+    int offset = (page - 1) * pageSize;
+    if (offset < 0) offset = 0;
+
+    query.addBindValue(limit);
+    query.addBindValue(offset);
+
     QJsonArray ticketsArray;
-    
+
     if (query.exec()) {
         while (query.next()) {
             QJsonObject ticket;
-            ticket["ticketID"] = query.value(0).toString();
-            ticket["flightNumber"] = query.value(1).toString();
+
+            int ticketId = query.value(0).toInt();
+            ticket["ticketID"] = ticketId;
+            ticket["ticketNo"] = query.value(1).toString();  // 编号
+            ticket["ticketType"] = "Flight";                 // 当前只有航班
             ticket["departureCity"] = query.value(2).toString() + "-" + query.value(7).toString();
             ticket["arrivalCity"] = query.value(3).toString() + "-" + query.value(8).toString();
-            
+
             QDateTime depTime = query.value(4).toDateTime();
             QDateTime arrTime = query.value(5).toDateTime();
             ticket["departureTime"] = depTime.toString("yyyy-MM-dd HH:mm");
             ticket["arrivalTime"] = arrTime.toString("yyyy-MM-dd HH:mm");
-            
+
             ticket["price"] = query.value(6).toDouble();
             ticket["company"] = query.value(9).toString();
             ticket["availableSeats"] = query.value(10).toInt();
-            
+
             ticketsArray.append(ticket);
         }
+    } else {
+        sendResponse(client, MSG_SEARCH_RESPONSE, false,
+                     "查询执行失败：" + query.lastError().text());
+        return;
     }
-    
+
     QJsonObject responseData;
     responseData["tickets"] = ticketsArray;
-    sendResponse(client, MSG_SEARCH_RESPONSE, true, "查询成功", responseData);
-    int totalCount = 1;
-    int totalPage = (totalCount + pageSize - 1) / pageSize;
-
-    // 添加 LIMIT 和 OFFSET
-    int offset = (page - 1) * pageSize;
-    sql += QString("LIMIT %1, %2").arg(offset).arg(pageSize);
-
-    // 在响应中添加分页信息
+    responseData["totalCount"] = totalCount;
     responseData["totalPage"] = totalPage;
     responseData["currentPage"] = page;
-    responseData["totalCount"] = totalCount;
+    responseData["pageSize"] = pageSize;
+
+    // 如果提供了 userID，则一并返回该用户已收藏的 ticketID 列表
+    if (!userID.isEmpty()) {
+        QJsonArray favoritesArray;
+        QSqlQuery favQuery(db);
+        favQuery.prepare("SELECT TicketID FROM favorites WHERE UserID = ?");
+        favQuery.addBindValue(userID.toInt());
+        if (favQuery.exec()) {
+            while (favQuery.next()) {
+                favoritesArray.append(favQuery.value(0).toInt());
+            }
+        }
+        responseData["favorites"] = favoritesArray;
+    }
+
+    sendResponse(client, MSG_SEARCH_RESPONSE, true, "查询成功", responseData);
 }
 
 // 检查时间冲突
