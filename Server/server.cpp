@@ -52,8 +52,8 @@ void Server::initDatabase()
     db = QSqlDatabase::addDatabase("QODBC");
     db.setConnectOptions("SQL_ATTR_ODBC_VERSION=SQL_OV_ODBC3");
 
-    QString connectionString = "DRIVER={MySQL ODBC 9.5 Unicode Driver};"
-                               "SERVER=127.0.0.1;"
+    QString connectionString = "DRIVER={MariaDB};"
+                               "SERVER=localhost;"
                                "PORT=3306;"
                                "DATABASE=flight;"
                                "USER=root;"

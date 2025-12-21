@@ -29,6 +29,7 @@ private slots:
     void onAddFavorite();
     void refreshTicketList();
     void showTicketSearchPage();
+    void on_Avatar_clicked();
     void onSearchResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     void onAddFavoriteResponse(int msgType, bool success, const QString &message, const QJsonObject &data);
     // 获取头像信息的响应槽

@@ -13,106 +13,6 @@
   <property name="windowTitle">
    <string>我的收藏夹</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">/* 全局背景和字体 */
-QWidget#favorite_dialog {
-    background-color: #f0f2f5;
-    font-family: &quot;Microsoft YaHei&quot;, &quot;Segoe UI&quot;, sans-serif;
-}
-
-/* 标题样式 */
-QLabel#label_title {
-    color: #2c3e50;
-    font-size: 22px;
-    font-weight: bold;
-    padding-left: 10px;
-}
-
-/* 顶部按钮通用样式 */
-QPushButton {
-    background-color: #ffffff;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    color: #606266;
-    padding: 6px 16px;
-    font-size: 14px;
-}
-
-QPushButton:hover {
-    background-color: #ecf5ff;
-    color: #409eff;
-    border-color: #c6e2ff;
-}
-
-QPushButton:pressed {
-    background-color: #d9ecff;
-    border-color: #409eff;
-}
-
-/* 特殊按钮样式：搜索按钮（强调色） */
-QPushButton#searchBtn {
-    background-color: #409eff;
-    color: white;
-    border: none;
-}
-QPushButton#searchBtn:hover {
-    background-color: #66b1ff;
-}
-QPushButton#searchBtn:pressed {
-    background-color: #3a8ee6;
-}
-
-/* 分组框（搜索区域）样式 */
-QGroupBox {
-    background-color: #ffffff;
-    border: 1px solid #e4e7ed;
-    border-radius: 8px;
-    margin-top: 10px;
-    padding-top: 10px;
-    font-size: 14px;
-    color: #303133;
-}
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top left;
-    padding: 0 10px;
-    color: #409eff;
-    font-weight: bold;
-}
-
-/* 输入框和下拉框样式 */
-QLineEdit, QDateEdit, QComboBox {
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    padding: 4px;
-    color: #606266;
-    background-color: #fff;
-    min-height: 20px;
-}
-QLineEdit:focus, QDateEdit:focus, QComboBox:focus {
-    border-color: #409eff;
-}
-
-/* 表格样式 */
-QTableWidget {
-    background-color: #ffffff;
-    border: 1px solid #e4e7ed;
-    border-radius: 8px;
-    gridline-color: #ebeef5;
-    selection-background-color: #ecf5ff;
-    selection-color: #303133;
-    font-size: 14px;
-}
-QHeaderView::section {
-    background-color: #f5f7fa;
-    color: #909399;
-    padding: 8px;
-    border: none;
-    border-bottom: 1px solid #e4e7ed;
-    border-right: 1px solid #e4e7ed;
-    font-weight: bold;
-}</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_main">
    <property name="spacing">
     <number>15</number>
@@ -135,7 +35,7 @@ QHeaderView::section {
       <number>6</number>
      </property>
      <property name="sizeConstraint">
-      <enum>QLayout::SetNoConstraint</enum>
+      <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
      </property>
      <item>
       <widget class="QLabel" name="label_title">
@@ -205,23 +105,17 @@ QHeaderView::section {
       <string>搜索</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="verticalSpacing">
-       <number>15</number>
-      </property>
-      <item row="1" column="3">
-       <widget class="QLineEdit" name="lineEdit_arr">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_datebegin">
+        <property name="text">
+         <string>开始日期：</string>
         </property>
-        <property name="placeholderText">
-         <string>例如：上海</string>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="1" rowspan="2">
        <widget class="QDateEdit" name="dateEdit_begin">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -234,30 +128,17 @@ QHeaderView::section {
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_datebegin">
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_dateend">
         <property name="text">
-         <string>开始日期：</string>
+         <string>结束日期：</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="label_type">
-        <property name="acceptDrops">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>交通类型：</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
+      <item row="0" column="3" rowspan="2">
        <widget class="QDateEdit" name="dateEdit_end">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -270,7 +151,33 @@ QHeaderView::section {
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="1" column="4" rowspan="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Policy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>148</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_dep">
+        <property name="text">
+         <string>出发地：</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QLineEdit" name="lineEdit_dep">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -283,67 +190,30 @@ QHeaderView::section {
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
-       <widget class="QComboBox" name="comboBox_type">
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_arr">
+        <property name="text">
+         <string>目的地：</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="lineEdit_arr">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>全部</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>飞机</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>火车</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>汽车</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_arr">
-        <property name="text">
-         <string>目的地：</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="placeholderText">
+         <string>例如：上海</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_dep">
-        <property name="text">
-         <string>出发地：</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_dateend">
-        <property name="text">
-         <string>结束日期：</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
+      <item row="2" column="5">
        <widget class="QPushButton" name="searchBtn">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -374,13 +244,13 @@ QHeaderView::section {
       <bool>true</bool>
      </property>
      <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
+      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
      </property>
      <property name="verticalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
+      <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
      </property>
      <property name="horizontalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
+      <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
      </property>
      <property name="showGrid">
       <bool>true</bool>

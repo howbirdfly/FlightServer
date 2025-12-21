@@ -1,190 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>passenger</class>
- <widget class="QDockWidget" name="passenger">
+ <widget class="QWidget" name="passenger">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>779</width>
-    <height>745</height>
+    <width>650</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>乘客</string>
+   <string>乘客信息</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>741</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>添加新乘客</string>
-    </property>
-    <widget class="QWidget" name="formLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>40</y>
-       <width>451</width>
-       <height>101</height>
-      </rect>
+  <layout class="QVBoxLayout" name="verticalLayout_main">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_frame">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>30</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>30</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_title">
         <property name="text">
-         <string>姓名：</string>
+         <string>乘客信息管理</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="edit_name">
-        <property name="maxLength">
-         <number>50</number>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_input">
+        <property name="spacing">
+         <number>15</number>
         </property>
-        <property name="placeholderText">
-         <string>请输入乘客姓名</string>
+        <item row="0" column="0">
+         <widget class="QLabel" name="name">
+          <property name="text">
+           <string>姓名：</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="edit_name">
+          <property name="placeholderText">
+           <string>请输入乘客姓名</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="id">
+          <property name="text">
+           <string>身份证号：</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="edit_idcard">
+          <property name="placeholderText">
+           <string>请输入18位身份证号码</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="phone">
+          <property name="text">
+           <string>电话号码：</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="edit_phone">
+          <property name="placeholderText">
+           <string>请输入联系电话</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="btn_add">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>添加乘客</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="table_passengers">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
+        <property name="columnCount">
+         <number>3</number>
+        </property>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>姓名</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>身份证号</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>电话号码</string>
+         </property>
+        </column>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>身份证：</string>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_btns">
+        <property name="spacing">
+         <number>20</number>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="edit_idcard">
-        <property name="maxLength">
-         <number>18</number>
-        </property>
-        <property name="placeholderText">
-         <string>请输入18位身份证号码</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>手机号：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="edit_phone">
-        <property name="maxLength">
-         <number>11</number>
-        </property>
-        <property name="placeholderText">
-         <string>请输入11位手机号</string>
-        </property>
-       </widget>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_refresh">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>刷新列表</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_close">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>关闭页面</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="btn_add">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>60</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>添加乘客</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>180</y>
-      <width>741</width>
-      <height>441</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>我的乘客列表</string>
-    </property>
-    <widget class="QTableWidget" name="table_passengers">
-     <property name="geometry">
-      <rect>
-       <x>15</x>
-       <y>41</y>
-       <width>691</width>
-       <height>381</height>
-      </rect>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
-     <column>
-      <property name="text">
-       <string>姓名</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>身份证</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>手机号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>操作</string>
-      </property>
-     </column>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="btn_close">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>650</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>关闭</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_refresh">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>650</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>刷新</string>
-    </property>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

@@ -14,15 +14,32 @@ QLabel#Title {
     font-weight: 600;
 }
 
-/* 头像 */
-QLabel#Avatar {
-    width: 40px; height: 40px;
-    min-width: 40px; min-height: 40px;
-    max-width: 40px; max-height: 40px;
+/* 头像按钮 - 圆形 */
+QPushButton#Avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     border-radius: 20px;  /* 关键：一半宽度 = 圆形 */
-    border: 1px solid rgba(255,255,255,0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
     background-color: transparent;
-    qproperty-alignment: AlignCenter;
+    padding: 0px;
+    /* 确保图标居中且圆形裁剪 */
+    qproperty-iconSize: 40px;
+}
+
+/* 头像按钮悬停效果 */
+QPushButton#Avatar:hover {
+    border: 2px solid rgba(255, 255, 255, 1.0);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 头像按钮按下效果 */
+QPushButton#Avatar:pressed {
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 /* Frame：高级灰绿色 */
 QFrame#btn_frame,

@@ -2,6 +2,7 @@
 #define NETWORKCLIENT_H
 
 #include <QTcpSocket>
+#include <QAbstractSocket>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
