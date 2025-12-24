@@ -9,8 +9,9 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QWidget>
+#include <QTableWidgetItem>
 passenger::passenger(QWidget *parent) :
-    QDockWidget(parent),
+    QWidget(parent),
     ui(new Ui::passenger)
 {
     ui->setupUi(this);
@@ -18,7 +19,7 @@ passenger::passenger(QWidget *parent) :
 }
 
 passenger::passenger(const QString &userID, QWidget *parent) :
-    QDockWidget(parent),
+    QWidget(parent),
     ui(new Ui::passenger),
     currentUserID(userID)
 {
@@ -55,6 +56,8 @@ void passenger::initTable()
     connect(ui->btn_add, &QPushButton::clicked, this, &passenger::on_btn_add_clicked);
     connect(ui->btn_refresh, &QPushButton::clicked, this, &passenger::on_btn_refresh_clicked);
     connect(ui->btn_close, &QPushButton::clicked, this, &passenger::on_btn_close_clicked);
+    connect(ui->table_passengers, &QTableWidget::cellDoubleClicked,
+            this, &passenger::onPassengerDoubleClicked);
 }
 int passenger::getUserId()
 {
@@ -201,6 +204,32 @@ void passenger::onDeletePassenger()
     data["passengerID"] = passengerId;
 
     client->sendRequest(MSG_DELETE_PASSENGER, data);
+}
+
+void passenger::onPassengerDoubleClicked(int row, int column)
+{
+    Q_UNUSED(column);
+
+    if (!ui->table_passengers) {
+        return;
+    }
+
+    QTableWidgetItem *nameItem = ui->table_passengers->item(row, 0);
+    QTableWidgetItem *idItem = ui->table_passengers->item(row, 1);
+    QTableWidgetItem *phoneItem = ui->table_passengers->item(row, 2);
+    if (!nameItem || !idItem || !phoneItem) {
+        return;
+    }
+
+    QString name = nameItem->text().trimmed();
+    QString idCard = idItem->text().trimmed();
+    QString phone = phoneItem->text().trimmed();
+    if (idCard.isEmpty()) {
+        return;
+    }
+
+    emit passengerSelected(name, idCard, phone);
+    close();
 }
 
 void passenger::onGetPassengersResponse(int msgType, bool success, const QString &message, const QJsonObject &data)

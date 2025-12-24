@@ -133,3 +133,25 @@ QTableWidget {
     selection-background-color: #e8f1eb;     /* 选中行背景色 */
     selection-color: #000000;                /* 选中行文字黑色 */
 }
+/* favorite text color */
+QWidget#favorite_dialog {
+    color: #000000;
+}
+
+QWidget#favorite_dialog QPushButton {
+    color: #000000;
+}
+
+QWidget#favorite_dialog QLineEdit,
+QWidget#favorite_dialog QDateEdit,
+QWidget#favorite_dialog QComboBox {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+QWidget#favorite_dialog QGroupBox,
+QWidget#favorite_dialog QTableWidget,
+QWidget#favorite_dialog QTableWidget::item,
+QWidget#favorite_dialog QHeaderView::section {
+    color: #000000;
+}

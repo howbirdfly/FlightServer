@@ -6,6 +6,7 @@
 #include <QHeaderView>
 #include <QDateTime>
 #include <QTableWidgetItem>
+#include <QBrush>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QFile>
@@ -61,15 +62,16 @@ void Single_Center::on_btn_back_clicked()
 }
 void Single_Center::initTable()
 {
-    ui->tableWidget_orders->setColumnCount(9);
     QStringList headers;
     headers << "订单号" << "票务类型" << "路线" << "出发时间" << "到达时间"
-            << "数量" << "总价(元)" << "状态" << "操作"<<"收藏";
+            << "数量" << "总价(元)" << "状态" << "操作" << "收藏";
+    ui->tableWidget_orders->setColumnCount(headers.size());
     ui->tableWidget_orders->setHorizontalHeaderLabels(headers);
     ui->tableWidget_orders->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget_orders->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget_orders->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget_orders->verticalHeader()->setVisible(false);
+    ui->tableWidget_orders->setStyleSheet(QString());
 }
 
 int Single_Center::getUserId()
@@ -93,13 +95,15 @@ void Single_Center::loadOrders()
         return;
     }
 
+    qDebug() << "Single_Center loadOrders userId:" << userId << "raw:" << currentUsername;
+
     NetworkClient *client = NetworkManager::instance()->client();
     
     connect(client, &NetworkClient::responseReceived,
             this, &Single_Center::onGetOrdersResponse, Qt::UniqueConnection);
     
     QJsonObject data;
-    data["userID"] = userId;
+    data["userID"] = QString::number(userId);
     
     client->sendRequest(MSG_GET_ORDERS, data);
 }
@@ -122,6 +126,7 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
     
     // 解析订单列表
     QJsonArray orders = data["orders"].toArray();
+    qDebug() << "Single_Center orders count:" << orders.size();
     QJsonArray favorites = data["favorites"].toArray();  // 获取收藏列表
     
     // 将收藏列表转换为QList
@@ -139,17 +144,49 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
         ui->tableWidget_orders->insertRow(row);
         
         int orderId = order["orderID"].toInt();
+        if (orderId == 0) {
+            orderId = order["orderID"].toString().toInt();
+        }
         QString orderNo = order["orderNo"].toString();
-        QString status = order["orderStatus"].toString();
-        int count = order["ticketCount"].toInt();
+        QString status = order["status"].toString();
+        if (status.isEmpty()) {
+            status = order["orderStatus"].toString();
+        }
+        int count = order["quantity"].toInt();
+        if (count == 0) {
+            count = order["ticketCount"].toInt();
+        }
         double totalPrice = order["totalPrice"].toDouble();
         QString ticketType = order["ticketType"].toString();
-        QString route = order["departureCity"].toString() + " → " + order["arrivalCity"].toString();
+        if (ticketType.isEmpty()) {
+            ticketType = "Flight";
+        }
+        QString depCity = order["departureCity"].toString();
+        QString arrCity = order["arrivalCity"].toString();
+        QString route = "-";
+        if (!depCity.isEmpty() || !arrCity.isEmpty()) {
+            route = depCity + " → " + arrCity;
+        }
         QString depTimeStr = order["departureTime"].toString();
+        if (depTimeStr.isEmpty()) {
+            depTimeStr = "-";
+        }
         QString arrTimeStr = order["arrivalTime"].toString();
-        QDateTime depTime = QDateTime::fromString(depTimeStr, "yyyy-MM-dd hh:mm:ss");
-        QDateTime arrTime = QDateTime::fromString(arrTimeStr, "yyyy-MM-dd hh:mm:ss");
+        if (arrTimeStr.isEmpty()) {
+            arrTimeStr = "-";
+        }
+        QDateTime depTime = QDateTime::fromString(depTimeStr, "yyyy-MM-dd HH:mm");
+        if (!depTime.isValid()) {
+            depTime = QDateTime::fromString(depTimeStr, "yyyy-MM-dd hh:mm:ss");
+        }
+        QDateTime arrTime = QDateTime::fromString(arrTimeStr, "yyyy-MM-dd HH:mm");
+        if (!arrTime.isValid()) {
+            arrTime = QDateTime::fromString(arrTimeStr, "yyyy-MM-dd hh:mm:ss");
+        }
         int ticketId = order["ticketID"].toInt();  // 获取票务ID用于收藏
+        if (ticketId == 0) {
+            ticketId = order["ticketID"].toString().toInt();
+        }
         
         QString typeName = ticketType == "Flight" ? "航班" : (ticketType == "Train" ? "火车" : "汽车");
         QString statusName = status == "Paid" ? "已支付" : (status == "Cancelled" ? "已取消" : "待支付");
@@ -179,6 +216,14 @@ void Single_Center::onGetOrdersResponse(int msgType, bool success,
         ui->tableWidget_orders->setItem(row, 5, new QTableWidgetItem(QString::number(count)));
         ui->tableWidget_orders->setItem(row, 6, new QTableWidgetItem(QString::number(totalPrice, 'f', 2)));
         ui->tableWidget_orders->setItem(row, 7, new QTableWidgetItem(statusName));
+
+        for (int i = 0; i < 8; ++i) {
+            QTableWidgetItem *item = ui->tableWidget_orders->item(row, i);
+            if (item) {
+                item->setTextAlignment(Qt::AlignCenter);
+                item->setForeground(QBrush(Qt::black));
+            }
+        }
         
         // 保存orderID到第一列的userData中
         ui->tableWidget_orders->item(row, 0)->setData(Qt::UserRole, orderId);
@@ -244,7 +289,7 @@ void Single_Center::onCancelOrderResponse(int msgType, bool success,
 {
     Q_UNUSED(data);
     
-    if (msgType != MSG_CANCEL_ORDER_RESPONSE) {
+    if (msgType != MSG_CANCEL_ORDER_RESPONSE && msgType != MSG_DELETE_ORDER_RESPONSE) {
         return;
     }
     
@@ -253,7 +298,8 @@ void Single_Center::onCancelOrderResponse(int msgType, bool success,
                this, &Single_Center::onCancelOrderResponse);
     
     if (success) {
-        QMessageBox::information(this, "成功", "订单已取消");
+        QString infoText = (msgType == MSG_DELETE_ORDER_RESPONSE) ? "订单已删除" : "订单已取消";
+        QMessageBox::information(this, "成功", infoText);
         loadOrders();  // 重新加载订单列表
     } else {
         QMessageBox::warning(this, "失败", message);
@@ -263,8 +309,7 @@ void Single_Center::onCancelOrderResponse(int msgType, bool success,
 //删除按钮
 void Single_Center::onDeleteOrder()
 {
-    // 删除订单功能可以通过取消订单接口实现，或者需要服务端支持删除订单接口
-    // 这里暂时使用取消订单的逻辑
+    // 删除订单使用专门的删除接口，避免重复退款
     QPushButton *btn = qobject_cast<QPushButton*>(sender());
     if (!btn) return;
 
@@ -276,7 +321,6 @@ void Single_Center::onDeleteOrder()
         return;
     }
 
-    // 使用取消订单接口（服务端可以处理已过期订单的删除）
     NetworkClient *client = NetworkManager::instance()->client();
     
     connect(client, &NetworkClient::responseReceived,
@@ -285,7 +329,7 @@ void Single_Center::onDeleteOrder()
     QJsonObject data;
     data["orderID"] = orderId;
     
-    client->sendRequest(MSG_CANCEL_ORDER, data);
+    client->sendRequest(MSG_DELETE_ORDER, data);
 }
 
 void Single_Center::onViewOrder()
@@ -304,6 +348,7 @@ void Single_Center::onAddFavorite()
     QPushButton *btn = qobject_cast<QPushButton*>(sender());
     if (!btn) return;
     int ticketId = btn->property("ticketId").toInt();
+    pendingFavoriteButton = btn;
     
     NetworkClient *client = NetworkManager::instance()->client();
     
@@ -332,13 +377,12 @@ void Single_Center::onAddFavoriteResponse(int msgType, bool success,
     
     if (success) {
         QMessageBox::information(this, "成功", "已添加到收藏夹！");
-        // 找到对应的按钮并更新状态
-        QPushButton *btn = qobject_cast<QPushButton*>(sender());
-        if (btn) {
-            btn->setEnabled(false);
-            btn->setText("已收藏");
+        if (pendingFavoriteButton) {
+            pendingFavoriteButton->setEnabled(false);
+            pendingFavoriteButton->setText("已收藏");
         }
     } else {
         QMessageBox::warning(this, "失败", message);
     }
+    pendingFavoriteButton = nullptr;
 }

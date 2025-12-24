@@ -72,6 +72,8 @@ void favorite_dialog::loadFavorites()
         return;
     }
 
+    qDebug() << "favorite_dialog loadFavorites userID:" << currentUserID;
+
     // 清空现有表格
     ui->tableWidget_favorites->setRowCount(0);
 
@@ -104,6 +106,7 @@ void favorite_dialog::onGetFavoritesResponse(int msgType, bool success,
     
     // 解析收藏列表
     QJsonArray favorites = data["favorites"].toArray();
+    qDebug() << "favorite_dialog favorites count:" << favorites.size();
     ui->tableWidget_favorites->setRowCount(0);
     
     for (const QJsonValue &value : favorites) {

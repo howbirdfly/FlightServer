@@ -7,10 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>700</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
+   <height>700</height>
+  </rect>
+ </property>
+ <property name="styleSheet">
+  <string notr="true">QWidget { color: #000000; }</string>
+ </property>
+ <property name="windowTitle">
    <string>我的收藏夹</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_main">

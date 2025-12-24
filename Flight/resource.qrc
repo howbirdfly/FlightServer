@@ -8,6 +8,10 @@
         <file>userprofile.qss</file>
         <file>single.qss</file>
         <file>favorite.qss</file>
+        <file>order_dialog.qss</file>
+        <file>edit_infor.qss</file>
+        <file>passenger.qss</file>
+        <file>pay.qss</file>
     </qresource>
     <qresource prefix="/">
         <file>pay_imag/alipay.jpg</file>
@@ -16,4 +20,3 @@
         <file>img/rightArrow.png</file>
     </qresource>
 </RCC>
-

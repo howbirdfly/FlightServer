@@ -3,6 +3,8 @@
 #include "userprofile.h"
 #include <QWidget>
 #include <QString>
+#include <QPointer>
+#include <QPushButton>
 #include <QJsonObject>
 #include "single_center.h"
 #include"favorite_dialog.h"
@@ -53,6 +55,7 @@ private:
     Single_Center *m_personalCenterPage;
     UserProfile *m_userProfilePage;
     favorite_dialog *m_favoriteDialogPage;
+    QPointer<QPushButton> pendingFavoriteButton;
 };
 
 #endif // DEAL_H

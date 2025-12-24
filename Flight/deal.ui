@@ -141,9 +141,9 @@
             <height>51</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
           <property name="text">
            <string>首页</string>
           </property>
@@ -174,7 +174,7 @@
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true"/>
+           <string notr="true">color: #000000;</string>
           </property>
           <property name="text">
            <string>收藏</string>

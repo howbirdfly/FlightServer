@@ -118,11 +118,7 @@ QPushButton#btn_back:pressed {
 /* 为 frame_2 设置背景图片和凹陷效果 */
 QFrame#frame_2 {
     /* 设置背景图片 */
-    background-image:url(:/images/flight2.png);
-
-    /* 背景图片平铺方式 */
-    background-repeat: no-repeat;
-    background-position: center;
+    border-image:url(:/images/flight2.png);
 
     /* 凹陷效果主要通过边框实现 */
     border: 4px solid qlineargradient(

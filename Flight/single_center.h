@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 #include <QJsonObject>
+#include <QPointer>
+#include <QPushButton>
 
 namespace Ui {
 class Single_Center;
@@ -37,6 +39,7 @@ private:
     int getUserId();
 
     Ui::Single_Center *ui;
+    QPointer<QPushButton> pendingFavoriteButton;
 };
 
 #endif // SINGLE_CENTER_H

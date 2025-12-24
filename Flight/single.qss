@@ -4,7 +4,7 @@ QLabel#label_title {
 
     /* 字体设置 - 更大字号 */
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    font-size: 20px;  /* 从 16px 增加到 20px */
+    font-size: 20px;
     font-weight: bold;
 
     /* 增加字间距 */

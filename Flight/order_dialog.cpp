@@ -5,6 +5,14 @@
 #include <QDateTime>
 #include <QRandomGenerator>
 #include <QJsonArray>
+#include <QComboBox>
+#include <QDialog>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QVBoxLayout>
 #include "networkmanager.h"
 #include "protocol.h"
 
@@ -19,12 +27,23 @@ OrderDialog::OrderDialog(int ticketId, int userId, QWidget *parent)
     , ticketId(ticketId)
     , userId(userId)
     , ticketPrice(0.0)
+    , userBalance(0.0)
 {
     ui->setupUi(this);
     setWindowTitle("填写订单信息");
     setModal(true);
 
+    QComboBox *combo = findChild<QComboBox*>("comboBox_class");
+    if (combo) {
+        combo->clear();
+        combo->addItem("经济舱");
+        combo->addItem("商务舱");
+        connect(combo, &QComboBox::currentIndexChanged,
+                this, &OrderDialog::calculateTotal);
+    }
+
     loadTicketInfo();
+    requestUserBalance();
     ui->spinBox_count->setMinimum(1);
     ui->spinBox_count->setMaximum(10);
     ui->spinBox_count->setValue(1);
@@ -45,6 +64,128 @@ void OrderDialog::loadTicketInfo()
     data["ticketID"] = ticketId;
     
     client->sendRequest(MSG_SEARCH_TICKETS, data);
+}
+
+void OrderDialog::on_btn_passenger_clicked()
+{
+    if (userId <= 0) {
+        QMessageBox::warning(this, "提示", "用户信息无效，无法获取乘客列表！");
+        return;
+    }
+
+    NetworkClient *client = NetworkManager::instance()->client();
+    if (!client->isConnected()) {
+        QMessageBox::warning(this, "错误", "未连接到服务器！");
+        return;
+    }
+
+    connect(client, &NetworkClient::responseReceived,
+            this, &OrderDialog::onGetPassengersResponse, Qt::UniqueConnection);
+
+    QJsonObject data;
+    data["userID"] = QString::number(userId);
+    client->sendRequest(MSG_GET_PASSENGERS, data);
+}
+
+void OrderDialog::onGetPassengersResponse(int msgType, bool success,
+                                          const QString &message, const QJsonObject &data)
+{
+    if (msgType != MSG_GET_PASSENGERS_RESPONSE) {
+        return;
+    }
+
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &OrderDialog::onGetPassengersResponse);
+
+    if (!success) {
+        QMessageBox::warning(this, "错误", message);
+        return;
+    }
+
+    QJsonArray passengers = data["passengers"].toArray();
+    if (passengers.isEmpty()) {
+        QMessageBox::information(this, "提示", "您还没有添加常用乘机人，请先去个人中心添加。");
+        return;
+    }
+
+    QDialog *dlg = new QDialog(this);
+    dlg->setWindowTitle("选择乘机人");
+    dlg->resize(350, 450);
+
+    QVBoxLayout *layout = new QVBoxLayout(dlg);
+    QListWidget *listWidget = new QListWidget(dlg);
+    listWidget->setStyleSheet(
+        "QListWidget { border: 1px solid #ccc; outline: none; }"
+        "QListWidget::item { padding: 10px; border-bottom: 1px solid #eee; }"
+        "QListWidget::item:hover { background-color: #f5f5f5; }"
+        "QListWidget::item:selected { background-color: #e6f7ff; color: #333; }"
+        "QListWidget::indicator { width: 20px; height: 20px; }"
+    );
+    layout->addWidget(listWidget);
+
+    for (const QJsonValue &value : passengers) {
+        QJsonObject passenger = value.toObject();
+        QString name = passenger["name"].toString();
+        QString idCard = passenger["idCard"].toString();
+        QString phone = passenger["phone"].toString();
+
+        QListWidgetItem *item = new QListWidgetItem(name);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(Qt::Unchecked);
+        item->setData(Qt::UserRole, idCard);
+        item->setData(Qt::UserRole + 1, phone);
+        listWidget->addItem(item);
+    }
+
+    connect(listWidget, &QListWidget::itemClicked, dlg, [listWidget](QListWidgetItem *item){
+        listWidget->blockSignals(true);
+        for (int i = 0; i < listWidget->count(); ++i) {
+            QListWidgetItem *it = listWidget->item(i);
+            it->setCheckState(Qt::Unchecked);
+            it->setSelected(false);
+        }
+        item->setCheckState(Qt::Checked);
+        item->setSelected(true);
+        listWidget->blockSignals(false);
+    });
+
+    QHBoxLayout *btnLayout = new QHBoxLayout();
+    QPushButton *btnOk = new QPushButton("确定", dlg);
+    QPushButton *btnCancel = new QPushButton("取消", dlg);
+    btnOk->setStyleSheet("background-color: #4CAF50; color: white; border-radius: 4px; padding: 6px 15px;");
+    btnCancel->setStyleSheet("background-color: #f44336; color: white; border-radius: 4px; padding: 6px 15px;");
+    btnLayout->addStretch();
+    btnLayout->addWidget(btnOk);
+    btnLayout->addWidget(btnCancel);
+    layout->addLayout(btnLayout);
+
+    connect(btnOk, &QPushButton::clicked, dlg, &QDialog::accept);
+    connect(btnCancel, &QPushButton::clicked, dlg, &QDialog::reject);
+    connect(listWidget, &QListWidget::itemDoubleClicked, dlg, [dlg](QListWidgetItem *item){
+        item->setCheckState(Qt::Checked);
+        dlg->accept();
+    });
+
+    if (dlg->exec() == QDialog::Accepted) {
+        QListWidgetItem *selectedItem = nullptr;
+        for (int i = 0; i < listWidget->count(); ++i) {
+            if (listWidget->item(i)->checkState() == Qt::Checked) {
+                selectedItem = listWidget->item(i);
+                break;
+            }
+        }
+
+        if (selectedItem) {
+            ui->lineEdit_name->setText(selectedItem->text());
+            ui->lineEdit_id->setText(selectedItem->data(Qt::UserRole).toString());
+            ui->lineEdit_phone->setText(selectedItem->data(Qt::UserRole + 1).toString());
+        } else {
+            QMessageBox::warning(this, "提示", "未选择任何乘机人！");
+        }
+    }
+
+    delete dlg;
 }
 
 void OrderDialog::onLoadTicketResponse(int msgType, bool success,
@@ -105,8 +246,63 @@ void OrderDialog::on_spinBox_count_valueChanged(int count)
 void OrderDialog::calculateTotal()
 {
     int count = ui->spinBox_count->value();
-    double total = ticketPrice * count;
+    double currentPrice = ticketPrice;
+    QComboBox *combo = findChild<QComboBox*>("comboBox_class");
+    if (combo && combo->currentText() == "商务舱") {
+        currentPrice += 200.0;
+    }
+    double total = currentPrice * count;
     ui->label_total->setText(QString::number(total, 'f', 2) + " 元");
+    QLabel *balanceLabel = findChild<QLabel*>("label_balance");
+    if (balanceLabel) {
+        if (userBalance > 0 && userBalance < total) {
+            balanceLabel->setStyleSheet("color: red; font-weight: bold;");
+        } else {
+            balanceLabel->setStyleSheet("color: green; font-weight: bold;");
+        }
+    }
+}
+
+void OrderDialog::requestUserBalance()
+{
+    if (userId <= 0) {
+        return;
+    }
+
+    NetworkClient *client = NetworkManager::instance()->client();
+    if (!client->isConnected()) {
+        return;
+    }
+
+    connect(client, &NetworkClient::responseReceived,
+            this, &OrderDialog::onGetBalanceResponse, Qt::UniqueConnection);
+
+    QJsonObject data;
+    data["userID"] = QString::number(userId);
+    client->sendRequest(MSG_GET_BALANCE, data);
+}
+
+void OrderDialog::onGetBalanceResponse(int msgType, bool success,
+                                       const QString &message, const QJsonObject &data)
+{
+    Q_UNUSED(message);
+
+    if (msgType != MSG_GET_BALANCE_RESPONSE) {
+        return;
+    }
+
+    disconnect(NetworkManager::instance()->client(),
+               &NetworkClient::responseReceived,
+               this, &OrderDialog::onGetBalanceResponse);
+
+    if (success) {
+        userBalance = data["balance"].toDouble();
+        QLabel *balanceLabel = findChild<QLabel*>("label_balance");
+        if (balanceLabel) {
+            balanceLabel->setText(QString("当前余额: ¥ %1").arg(QString::number(userBalance, 'f', 2)));
+        }
+        calculateTotal();
+    }
 }
 void OrderDialog::on_btn_confirm_clicked()
 {
@@ -114,6 +310,20 @@ void OrderDialog::on_btn_confirm_clicked()
     QString passengerID = ui->lineEdit_id->text().trimmed();
     QString contactPhone = ui->lineEdit_phone->text().trimmed();
     int count = ui->spinBox_count->value();
+    double currentPrice = ticketPrice;
+    QComboBox *combo = findChild<QComboBox*>("comboBox_class");
+    if (combo && combo->currentText() == "商务舱") {
+        currentPrice += 200.0;
+    }
+    double totalCost = currentPrice * count;
+
+    if (userBalance > 0 && totalCost > userBalance) {
+        QMessageBox::critical(this, "支付失败",
+                              QString("您的余额不足！\n当前余额: ¥%1\n订单金额: ¥%2\n请先充值。")
+                                  .arg(QString::number(userBalance, 'f', 2))
+                                  .arg(QString::number(totalCost, 'f', 2)));
+        return;
+    }
 
     // 输入验证
     if (passengerName.isEmpty()) {
@@ -138,13 +348,15 @@ void OrderDialog::on_btn_confirm_clicked()
     
     // 构造请求数据
     QJsonObject data;
-    data["userID"] = userId;
-    data["ticketID"] = ticketId;
+    data["userID"] = QString::number(userId);
+    data["ticketID"] = QString::number(ticketId);
     data["passengerName"] = passengerName;
     data["passengerIDCard"] = passengerID;
     data["contactPhone"] = contactPhone;
-    data["ticketCount"] = count;
-    data["totalPrice"] = ticketPrice * count;
+    data["quantity"] = count;  // 服务端兼容 ticketCount，但优先使用 quantity
+    if (combo) {
+        data["cabinClass"] = combo->currentText();
+    }
     
     // 发送创建订单请求
     client->sendRequest(MSG_CREATE_ORDER, data);

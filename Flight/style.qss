@@ -1,9 +1,6 @@
 /* ===== 白色半透明风格（紧凑版） ===== */
 QMainWindow {
-    background-image: url(:/images/flight2.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    border-image: url(:/images/flight2.png);
 }
 
 /* 1. 容器（QFrame） - 尺寸缩小 */

@@ -13,6 +13,7 @@
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QFile>
+#include <QPoint>
 #include <QIntValidator>
 #include <QLineEdit>
 #include <QPixmap>
@@ -285,16 +286,16 @@ void Deal::onSearchResponse(int msgType, bool success,
     if (msgType != MSG_SEARCH_RESPONSE) {
         return;
     }
-    
+
     disconnect(NetworkManager::instance()->client(),
                &NetworkClient::responseReceived,
                this, &Deal::onSearchResponse);
-    
+
     if (!success) {
         QMessageBox::warning(this, "错误", message);
         return;
     }
-    
+
     // 解析分页信息（如果有）
     if (data.contains("totalPage")) {
         totalPage = data["totalPage"].toInt();
@@ -340,7 +341,7 @@ void Deal::onSearchResponse(int msgType, bool success,
         
         // 价格保留2位小数
         ui->tableWidget_tickets->setItem(row, 6, new QTableWidgetItem(QString::number(ticket["price"].toDouble(), 'f', 2)));
-        ui->tableWidget_tickets->setItem(row, 7, new QTableWidgetItem(ticket["availableSeats"].toString()));
+        ui->tableWidget_tickets->setItem(row, 7, new QTableWidgetItem(QString::number(ticket["availableSeats"].toInt())));
         ui->tableWidget_tickets->setItem(row, 8, new QTableWidgetItem(ticket["company"].toString()));
         
         // 内容居中显示
@@ -364,7 +365,7 @@ void Deal::onSearchResponse(int msgType, bool success,
         bool isFavorited = favoriteTicketIds.contains(ticketId);
         QPushButton *btnFav = new QPushButton(isFavorited ? "已收藏" : "收藏");
         btnFav->setProperty("ticketId", ticketId);
-        btnFav->setStyleSheet("border: 1px solid lightgray; padding:1px; border-radius:3px;");
+        btnFav->setStyleSheet("color: black; border: 1px solid lightgray; padding:1px; border-radius:3px;");
         
         if (isFavorited) {
             btnFav->setEnabled(false);
@@ -425,7 +426,9 @@ void Deal::onBookTicket()
     OrderDialog *dialog = new OrderDialog(ticketId, userId, this);
     if (dialog->exec() == QDialog::Accepted) {
         refreshTicketList();
-        QMessageBox::information(this, "成功", "订票成功！");
+        if (m_personalCenterPage) {
+            m_personalCenterPage->refreshOrderList();
+        }
     }
     delete dialog;
 }
@@ -501,6 +504,21 @@ void Deal::onAddFavorite()
     QPushButton *btn = qobject_cast<QPushButton*>(sender());
     if (!btn) return;
     int ticketId = btn->property("ticketId").toInt();
+    if (ticketId <= 0 && ui->tableWidget_tickets) {
+        QPoint tablePos = btn->mapTo(ui->tableWidget_tickets, QPoint(0, 0));
+        int row = ui->tableWidget_tickets->indexAt(tablePos).row();
+        if (row >= 0) {
+            QTableWidgetItem *item = ui->tableWidget_tickets->item(row, 0);
+            if (item) {
+                ticketId = item->data(Qt::UserRole).toInt();
+            }
+        }
+    }
+    if (ticketId <= 0) {
+        QMessageBox::warning(this, "提示", "票务信息缺失！");
+        return;
+    }
+    pendingFavoriteButton = btn;
     
     NetworkClient *client = NetworkManager::instance()->client();
     
@@ -529,15 +547,14 @@ void Deal::onAddFavoriteResponse(int msgType, bool success,
     
     if (success) {
         QMessageBox::information(this, "成功", "已添加到收藏夹！");
-        // 找到对应的按钮并更新状态
-        QPushButton *btn = qobject_cast<QPushButton*>(sender());
-        if (btn) {
-            btn->setEnabled(false);
-            btn->setText("已收藏");
+        if (pendingFavoriteButton) {
+            pendingFavoriteButton->setEnabled(false);
+            pendingFavoriteButton->setText("已收藏");
         }
     } else {
         QMessageBox::warning(this, "失败", message);
     }
+    pendingFavoriteButton = nullptr;
 }
 
 void Deal::on_favorite_button_clicked()

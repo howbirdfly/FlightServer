@@ -14,32 +14,31 @@ QLabel#Title {
     font-weight: 600;
 }
 
-/* 头像按钮 - 圆形 */
+/* 头像按钮  */
 QPushButton#Avatar {
+    /* 尺寸控制 */
     width: 40px;
     height: 40px;
     min-width: 40px;
     min-height: 40px;
     max-width: 40px;
     max-height: 40px;
-    border-radius: 20px;  /* 关键：一半宽度 = 圆形 */
-    border: 2px solid rgba(255, 255, 255, 0.8);
+
+    /* 圆形效果 */
+    border-radius: 20px;  /* 一半宽度 = 圆形 */
+    border: 1px solid rgba(255,255,255,0.6);
+
+    /* 按钮样式 */
     background-color: transparent;
-    padding: 0px;
-    /* 确保图标居中且圆形裁剪 */
-    qproperty-iconSize: 40px;
-}
+    padding: 0px;        /* 重要：去除按钮默认内边距 */
+    margin: 0px;         /* 去除外边距 */
+    border-style: solid; /* 明确边框样式 */
 
-/* 头像按钮悬停效果 */
-QPushButton#Avatar:hover {
-    border: 2px solid rgba(255, 255, 255, 1.0);
-    background-color: rgba(255, 255, 255, 0.1);
-}
+    /* 光标 */
+    cursor: pointer;     /* 手型光标 */
 
-/* 头像按钮按下效果 */
-QPushButton#Avatar:pressed {
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    background-color: rgba(255, 255, 255, 0.15);
+    /* 确保图标正常显示 */
+    qproperty-iconSize: 40px 40px;  /* 图标大小 */
 }
 /* Frame：高级灰绿色 */
 QFrame#btn_frame,
@@ -96,6 +95,7 @@ QPushButton#home:disabled {
     color: #7f968b;                 /* 灰色文字 */
     border: 1px solid #9db3a9;
 }
+
 QGroupBox#searchGroup {
     background-color: white;
     border: 1px solid #d0d0d0;
@@ -316,4 +316,13 @@ QPushButton#btn_next {
     border: none;
     min-width: 30px;
     min-height: 30px;
+}
+/* 页码信息标签样式 - 统一字体和大小 */
+QLabel#label_pageInfo,
+QLabel#label_pageInfo_2 {
+    color: black;
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    font-size: 14px;   /* 保持与搜索栏一致 */
+    font-weight: 500;
+    background: transparent;
 }
