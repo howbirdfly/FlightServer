@@ -213,11 +213,13 @@ void UserProfile::onGetUserInfoResponse(int msgType, bool success,
         QString idCard = data["idCard"].toString();
         QString jianjie = data["jianjie"].toString();
         QString avatarBase64 = data["avatar"].toString();
+        double balance= data["balance"].toDouble();
         
         ui->txt_Username->setText(username);
         this->currentUsername = username;
         ui->txt_UserAccount->setText(idCard);
         ui->txt_jianjie->setText(jianjie);
+        ui->txt_yu->setText(QString::number(balance, 'f', 2));
         
         // 处理头像数据（从Base64解码）
         if (!avatarBase64.isEmpty()) {

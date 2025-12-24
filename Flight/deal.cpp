@@ -153,7 +153,7 @@ Deal::~Deal()
 void Deal::initTable()
 {
     QStringList headers;
-    headers << "类型" << "编号" << "出发地" << "目的地" << "出发时间"
+    headers << "编号" << "出发地" << "目的地" << "出发时间"
             << "到达时间" << "价格(元)" << "可用座位" << "公司" << "操作" << "收藏";
     ui->tableWidget_tickets->setColumnCount(headers.size());
     ui->tableWidget_tickets->setHorizontalHeaderLabels(headers);
@@ -161,27 +161,26 @@ void Deal::initTable()
     QHeaderView *header = ui->tableWidget_tickets->horizontalHeader();
     
     // 出发地和目的地列自适应拉伸
-    header->setSectionResizeMode(2, QHeaderView::Stretch);  // 出发地
-    header->setSectionResizeMode(3, QHeaderView::Stretch);  // 目的地
+    header->setSectionResizeMode(1, QHeaderView::Stretch);  // 出发地
+    header->setSectionResizeMode(2, QHeaderView::Stretch);  // 目的地
     
     // 类型、编号、时间列根据内容调整
-    header->setSectionResizeMode(0, QHeaderView::ResizeToContents);  // 类型
-    header->setSectionResizeMode(1, QHeaderView::ResizeToContents);   // 编号
-    header->setSectionResizeMode(4, QHeaderView::ResizeToContents);  // 出发时间
-    header->setSectionResizeMode(5, QHeaderView::ResizeToContents);  // 到达时间
-    header->setSectionResizeMode(8, QHeaderView::ResizeToContents); // 公司
+    header->setSectionResizeMode(0, QHeaderView::ResizeToContents);   // 编号
+    header->setSectionResizeMode(3, QHeaderView::ResizeToContents);  // 出发时间
+    header->setSectionResizeMode(4, QHeaderView::ResizeToContents);  // 到达时间
+    header->setSectionResizeMode(7, QHeaderView::ResizeToContents); // 公司
     
     // 价格和座位列可交互调整
-    header->setSectionResizeMode(6, QHeaderView::Interactive);  // 价格
-    header->setSectionResizeMode(7, QHeaderView::Interactive);  // 座位
-    ui->tableWidget_tickets->setColumnWidth(6, 85);
-    ui->tableWidget_tickets->setColumnWidth(7, 80);
+    header->setSectionResizeMode(5, QHeaderView::Interactive);  // 价格
+    header->setSectionResizeMode(6, QHeaderView::Interactive);  // 座位
+    ui->tableWidget_tickets->setColumnWidth(5, 85);
+    ui->tableWidget_tickets->setColumnWidth(6, 80);
     
     // 操作和收藏列固定宽度
-    header->setSectionResizeMode(9, QHeaderView::Fixed);  // 操作
-    header->setSectionResizeMode(10, QHeaderView::Fixed); // 收藏
+    header->setSectionResizeMode(8, QHeaderView::Fixed);  // 操作
+    header->setSectionResizeMode(9, QHeaderView::Fixed); // 收藏
+    ui->tableWidget_tickets->setColumnWidth(8, 60);
     ui->tableWidget_tickets->setColumnWidth(9, 60);
-    ui->tableWidget_tickets->setColumnWidth(10, 60);
     
     ui->tableWidget_tickets->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget_tickets->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -242,7 +241,6 @@ void Deal::searchTickets()
     QString from = ui->lineEdit_from->text().trimmed();
     QString to = ui->lineEdit_to->text().trimmed();
     QDate date = ui->dateEdit->date();
-    //QString type = ui->comboBox_type->currentText();
 
     // 如果出发地和目的地都为空，则查询全部航班；否则需要都填写
     if (from.isEmpty() && !to.isEmpty()) {
@@ -325,27 +323,27 @@ void Deal::onSearchResponse(int msgType, bool success,
         ui->tableWidget_tickets->insertRow(row);
         
         int ticketId = ticket["ticketID"].toInt();
-        QString ticketType = ticket["ticketType"].toString();
-        QString typeName = ticketType == "Flight" ? "航班" : (ticketType == "Train" ? "火车" : "汽车");
+        // QString ticketType = ticket["ticketType"].toString();
+        // QString typeName = ticketType == "Flight" ? "航班" : (ticketType == "Train" ? "火车" : "汽车");
         
-        // 设置表格数据
-        ui->tableWidget_tickets->setItem(row, 0, new QTableWidgetItem(typeName));
-        ui->tableWidget_tickets->setItem(row, 1, new QTableWidgetItem(ticket["ticketNo"].toString()));
-        ui->tableWidget_tickets->setItem(row, 2, new QTableWidgetItem(ticket["departureCity"].toString()));
-        ui->tableWidget_tickets->setItem(row, 3, new QTableWidgetItem(ticket["arrivalCity"].toString()));
+        // // 设置表格数据
+        // ui->tableWidget_tickets->setItem(row, 0, new QTableWidgetItem(typeName));
+        ui->tableWidget_tickets->setItem(row, 0, new QTableWidgetItem(ticket["ticketNo"].toString()));
+        ui->tableWidget_tickets->setItem(row, 1, new QTableWidgetItem(ticket["departureCity"].toString()));
+        ui->tableWidget_tickets->setItem(row, 2, new QTableWidgetItem(ticket["arrivalCity"].toString()));
         
         QString depTimeStr = ticket["departureTime"].toString();
         QString arrTimeStr = ticket["arrivalTime"].toString();
-        ui->tableWidget_tickets->setItem(row, 4, new QTableWidgetItem(depTimeStr));
-        ui->tableWidget_tickets->setItem(row, 5, new QTableWidgetItem(arrTimeStr));
+        ui->tableWidget_tickets->setItem(row, 3, new QTableWidgetItem(depTimeStr));
+        ui->tableWidget_tickets->setItem(row, 4, new QTableWidgetItem(arrTimeStr));
         
         // 价格保留2位小数
-        ui->tableWidget_tickets->setItem(row, 6, new QTableWidgetItem(QString::number(ticket["price"].toDouble(), 'f', 2)));
-        ui->tableWidget_tickets->setItem(row, 7, new QTableWidgetItem(QString::number(ticket["availableSeats"].toInt())));
-        ui->tableWidget_tickets->setItem(row, 8, new QTableWidgetItem(ticket["company"].toString()));
+        ui->tableWidget_tickets->setItem(row, 5, new QTableWidgetItem(QString::number(ticket["price"].toDouble(), 'f', 2)));
+        ui->tableWidget_tickets->setItem(row, 6, new QTableWidgetItem(QString::number(ticket["availableSeats"].toInt())));
+        ui->tableWidget_tickets->setItem(row, 7, new QTableWidgetItem(ticket["company"].toString()));
         
         // 内容居中显示
-        for (int i = 0; i < 9; ++i) {
+        for (int i = 0; i < 8; ++i) {
             if (ui->tableWidget_tickets->item(row, i)) {
                 ui->tableWidget_tickets->item(row, i)->setTextAlignment(Qt::AlignCenter);
             }
@@ -359,7 +357,7 @@ void Deal::onSearchResponse(int msgType, bool success,
         btnBook->setStyleSheet("background-color:#4CAF50; color:white; border:none; padding:2px 8px; border-radius:3px;");
         btnBook->setProperty("ticketId", ticketId);
         connect(btnBook, &QPushButton::clicked, this, &Deal::onBookTicket);
-        ui->tableWidget_tickets->setCellWidget(row, 9, btnBook);
+        ui->tableWidget_tickets->setCellWidget(row, 8, btnBook);
         
         // 添加收藏按钮
         bool isFavorited = favoriteTicketIds.contains(ticketId);
@@ -371,7 +369,7 @@ void Deal::onSearchResponse(int msgType, bool success,
             btnFav->setEnabled(false);
         }
         connect(btnFav, &QPushButton::clicked, this, &Deal::onAddFavorite);
-        ui->tableWidget_tickets->setCellWidget(row, 10, btnFav);
+        ui->tableWidget_tickets->setCellWidget(row, 9, btnFav);
         
         row++;
     }
@@ -412,14 +410,6 @@ void Deal::onBookTicket()
 
     int ticketId = btn->property("ticketId").toInt();
     
-    // 获取当前用户ID
-    //QSqlQuery query;
-    //query.prepare("SELECT UserID FROM users WHERE Username = ?");
-    //query.addBindValue(currentUserID);
-    //if (!query.exec() || !query.next()) {
-    //    QMessageBox::warning(this, "错误", "获取用户信息失败！");
-    //    return;
-    //}
     int userId = currentUserID.toInt();
 
     // 打开订单对话框

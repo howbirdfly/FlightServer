@@ -470,7 +470,7 @@ void Server::handleGetUserInfo(QTcpSocket *client, const QJsonObject &data)
     }
 
     QSqlQuery query(db);
-    query.prepare("SELECT Username, IDCard, jianjie, avatar FROM users WHERE UserID = ?");
+    query.prepare("SELECT Username, IDCard, jianjie, avatar, Balance FROM users WHERE UserID = ?");
     query.addBindValue(userID.toInt());
 
     if (query.exec() && query.next())
@@ -479,6 +479,7 @@ void Server::handleGetUserInfo(QTcpSocket *client, const QJsonObject &data)
         responseData["username"] = query.value(0).toString();
         responseData["idCard"] = query.value(1).toString();
         responseData["jianjie"] = query.value(2).toString();
+        responseData["balance"] = query.value(4).toDouble();
 
         // 处理头像数据（转换为Base64）
         QByteArray avatarData = query.value(3).toByteArray();
