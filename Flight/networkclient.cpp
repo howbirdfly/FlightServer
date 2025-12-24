@@ -67,7 +67,7 @@ void NetworkClient::sendRequest(int msgType, const QJsonObject &data)
     // 添加长度前缀
     QByteArray packet;
     QDataStream stream(&packet, QIODevice::WriteOnly);
-    stream.setVersion(QDataStream::Qt_6_0);
+    stream.setVersion(QDataStream::Qt_5_15);
     stream << (quint32)jsonData.size();
     packet.append(jsonData);
     
@@ -81,7 +81,7 @@ void NetworkClient::sendRequest(int msgType, const QJsonObject &data)
 void NetworkClient::onReadyRead()
 {
     QDataStream in(socket);
-    in.setVersion(QDataStream::Qt_6_0);
+    in.setVersion(QDataStream::Qt_5_15);
     
     // 循环处理可能的多条消息（粘包处理）
     while (true) {

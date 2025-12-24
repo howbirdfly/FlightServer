@@ -11,15 +11,25 @@ Sign_in::Sign_in(QWidget *parent)
     , ui(new Ui::Sign_in)
 {
     ui->setupUi(this);
-    
-    // 加载样式（使用与登录页面相同的样式）
+    this->setAttribute(Qt::WA_StyledBackground, true);
+    // 加载样式
+    QString styleSheet = "";
     QFile qssFile(":/styles/style.qss");
     if (qssFile.open(QFile::ReadOnly)) {
-        QString styleSheet = QLatin1String(qssFile.readAll());
-        this->setStyleSheet(styleSheet);
+        styleSheet = QLatin1String(qssFile.readAll());
         qssFile.close();
-        qDebug() << "成功加载 style.qss";
+
     }
+    QString backgroundStyle =
+        "Sign_in {\n"
+        "    background-image: url(:/images/flight2.png);\n"
+        "    background-position: center;\n"
+        "    background-repeat: no-repeat;\n"
+        "    background-attachment: fixed;\n"
+        "}\n";
+
+    // 合并样式：背景样式 + 原始样式
+    this->setStyleSheet(backgroundStyle + styleSheet);
 }
 
 Sign_in::~Sign_in()

@@ -58,9 +58,9 @@ void Server::initDatabase()
     QString connectionString = "DRIVER={MySQL ODBC 9.5 Unicode Driver};"
                                "SERVER=localhost;"
                                "PORT=3306;"
-                               "DATABASE=flightdb;"
+                               "DATABASE=flight;"
                                "USER=root;"
-                               "PASSWORD=@WUyh0601;"
+                               "PASSWORD=123456;"
                                "OPTION=3;";
 
     db.setDatabaseName(connectionString);
@@ -306,7 +306,7 @@ void Server::readClientData()
         return;
 
     QDataStream in(client);
-    in.setVersion(QDataStream::Qt_6_0);
+    in.setVersion(QDataStream::Qt_5_15);
 
     static QMap<QTcpSocket *, quint32> packetSizes;
 

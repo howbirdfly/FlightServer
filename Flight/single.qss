@@ -7,8 +7,6 @@ QLabel#label_title {
     font-size: 20px;
     font-weight: bold;
 
-    /* 增加字间距 */
-    letter-spacing: 1px;  /* 添加字间距 */
 
     /* 边框和边距 - 增加间距 */
     border: none;

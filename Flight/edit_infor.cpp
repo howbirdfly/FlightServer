@@ -19,6 +19,13 @@ edit_infor::edit_infor(QWidget *parent)
     , ui(new Ui::edit_infor)
 {
     ui->setupUi(this);
+    QFile qssFile(":/styles/edit_info.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+
+    }
 }
 
 edit_infor::edit_infor(QString userID, QString username, QWidget *parent)
@@ -48,6 +55,14 @@ edit_infor::edit_infor(QString userID, QString username, QWidget *parent)
     
     // 发送获取用户信息请求
     client->sendRequest(MSG_GET_USER_INFO, data);
+    // 加载样式
+    QFile qssFile(":/styles/edit_info.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+
+    }
 }
 
 edit_infor::~edit_infor()

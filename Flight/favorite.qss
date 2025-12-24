@@ -19,8 +19,7 @@ QLabel#label_title {
     font-size: 20px;  /* 从 16px 增加到 20px */
     font-weight: bold;
 
-    /* 增加字间距 */
-    letter-spacing: 1px;  /* 添加字间距 */
+
 
     /* 边框和边距 - 增加间距 */
     border: none;
@@ -88,8 +87,7 @@ QPushButton#searchBtn:hover {
                                 stop:0 #38b07e,
                                 stop:1 #2f976c);
 
-    /* 可选：添加轻微阴影增强悬浮感 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
 }
 
 /* 按下效果 */
@@ -118,11 +116,7 @@ QTableWidget {
     border: 2px solid #d0dbd6;              /* 浅灰绿边框 */
     border-radius: 8px;                     /* 圆角 */
 
-    /* 凹陷效果 */
-    box-shadow:
-        inset 2px 2px 4px rgba(0, 0, 0, 0.08),    /* 内阴影上左 */
-        inset -2px -2px 4px rgba(0, 0, 0, 0.03),  /* 内阴影下右 */
-        0 1px 3px rgba(0, 0, 0, 0.05);            /* 轻微外阴影增加层次 */
+
 
     /* 表格字体 */
     font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;

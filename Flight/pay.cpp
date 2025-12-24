@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QJsonObject>
-
+#include<QFile>
 Pay::Pay(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Pay)
@@ -17,6 +17,14 @@ Pay::Pay(QWidget *parent) :
             this, &Pay::on_amount_changed);
 
     ui->label_amount->setText("¥ 0.00");
+    // 加载样式
+    QFile qssFile(":/styles/pay.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+
+    }
 }
 
 Pay::~Pay()
