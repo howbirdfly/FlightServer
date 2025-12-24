@@ -10,12 +10,21 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include <QTableWidgetItem>
+#include<QFile>
 passenger::passenger(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::passenger)
 {
     ui->setupUi(this);
     initTable();
+    // 加载样式
+    QFile qssFile(":/styles/passenger.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 style.qss";
+    }
 }
 
 passenger::passenger(const QString &userID, QWidget *parent) :
@@ -26,6 +35,14 @@ passenger::passenger(const QString &userID, QWidget *parent) :
     ui->setupUi(this);
     initTable();
     loadPassengers();
+    // 加载样式
+    QFile qssFile(":/styles/passenger.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+
+    }
 }
 void passenger::setUserId(const QString &userID)
 {

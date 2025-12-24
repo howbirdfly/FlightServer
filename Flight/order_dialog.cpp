@@ -15,7 +15,7 @@
 #include <QVBoxLayout>
 #include "networkmanager.h"
 #include "protocol.h"
-
+#include<QFile>
 OrderDialog::~OrderDialog()
 {
     delete ui;
@@ -38,7 +38,7 @@ OrderDialog::OrderDialog(int ticketId, int userId, QWidget *parent)
         combo->clear();
         combo->addItem("经济舱");
         combo->addItem("商务舱");
-        connect(combo, &QComboBox::currentIndexChanged,
+        connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged),
                 this, &OrderDialog::calculateTotal);
     }
 
@@ -50,6 +50,14 @@ OrderDialog::OrderDialog(int ticketId, int userId, QWidget *parent)
 
     connect(ui->spinBox_count, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &OrderDialog::on_spinBox_count_valueChanged);
+    // 加载样式
+    QFile qssFile(":/styles/order_dialog.qss");
+    if (qssFile.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(qssFile.readAll());
+        this->setStyleSheet(styleSheet);
+        qssFile.close();
+        qDebug() << "成功加载 style.qss";
+    }
 }
 
 void OrderDialog::loadTicketInfo()
