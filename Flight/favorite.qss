@@ -1,7 +1,7 @@
 QPushButton#btn_refresh,
 QPushButton#btn_back {
     background-color: #0f3b2e;
-    color: white;
+    color: white !important;
     border: 1px solid #0a291f;
     border-radius: 4px;
 
@@ -132,9 +132,7 @@ QWidget#favorite_dialog {
     color: #000000;
 }
 
-QWidget#favorite_dialog QPushButton {
-    color: #000000;
-}
+
 
 QWidget#favorite_dialog QLineEdit,
 QWidget#favorite_dialog QDateEdit,

@@ -54,7 +54,7 @@ public:
         if (favorite_dialog->objectName().isEmpty())
             favorite_dialog->setObjectName(QString::fromUtf8("favorite_dialog"));
         favorite_dialog->resize(1000, 700);
-        favorite_dialog->setStyleSheet(QString::fromUtf8("QWidget { color: #000000; }"));
+        favorite_dialog->setStyleSheet(QString::fromUtf8(""));
         verticalLayout_main = new QVBoxLayout(favorite_dialog);
         verticalLayout_main->setSpacing(15);
         verticalLayout_main->setObjectName(QString::fromUtf8("verticalLayout_main"));
@@ -62,7 +62,7 @@ public:
         horizontalLayout_header = new QHBoxLayout();
         horizontalLayout_header->setSpacing(6);
         horizontalLayout_header->setObjectName(QString::fromUtf8("horizontalLayout_header"));
-        horizontalLayout_header->setSizeConstraint(QLayout::SizeConstraint::SetNoConstraint);
+        horizontalLayout_header->setSizeConstraint(QLayout::SetNoConstraint);
         label_title = new QLabel(favorite_dialog);
         label_title->setObjectName(QString::fromUtf8("label_title"));
         label_title->setStyleSheet(QString::fromUtf8(""));
@@ -102,7 +102,7 @@ public:
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         label_datebegin = new QLabel(groupBox);
         label_datebegin->setObjectName(QString::fromUtf8("label_datebegin"));
-        label_datebegin->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+        label_datebegin->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout->addWidget(label_datebegin, 0, 0, 1, 1);
 
@@ -119,7 +119,7 @@ public:
 
         label_dateend = new QLabel(groupBox);
         label_dateend->setObjectName(QString::fromUtf8("label_dateend"));
-        label_dateend->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+        label_dateend->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout->addWidget(label_dateend, 0, 2, 1, 1);
 
@@ -131,13 +131,13 @@ public:
 
         gridLayout->addWidget(dateEdit_end, 0, 3, 2, 1);
 
-        horizontalSpacer = new QSpacerItem(148, 20, QSizePolicy::Policy::Minimum, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(148, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
 
         gridLayout->addItem(horizontalSpacer, 1, 4, 2, 1);
 
         label_dep = new QLabel(groupBox);
         label_dep->setObjectName(QString::fromUtf8("label_dep"));
-        label_dep->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+        label_dep->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout->addWidget(label_dep, 2, 0, 1, 1);
 
@@ -150,7 +150,7 @@ public:
 
         label_arr = new QLabel(groupBox);
         label_arr->setObjectName(QString::fromUtf8("label_arr"));
-        label_arr->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+        label_arr->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout->addWidget(label_arr, 2, 2, 1, 1);
 
@@ -196,9 +196,9 @@ public:
         tableWidget_favorites->setHorizontalHeaderItem(8, __qtablewidgetitem8);
         tableWidget_favorites->setObjectName(QString::fromUtf8("tableWidget_favorites"));
         tableWidget_favorites->setAlternatingRowColors(true);
-        tableWidget_favorites->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
-        tableWidget_favorites->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
-        tableWidget_favorites->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+        tableWidget_favorites->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tableWidget_favorites->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        tableWidget_favorites->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
         tableWidget_favorites->setShowGrid(true);
         tableWidget_favorites->horizontalHeader()->setHighlightSections(false);
         tableWidget_favorites->horizontalHeader()->setStretchLastSection(true);
